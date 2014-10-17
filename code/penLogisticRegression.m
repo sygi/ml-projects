@@ -1,4 +1,4 @@
-function beta = penLogisticRegression(y,tX,alpha,lambda)
+function beta = penLogisticRegression(y,tX,alpha,lambda, maxIter)
 %penLogisticRegression - penalized logistic regression using gradient descent
 %
 %       beta = penLogisticRegression(y,tX,alpha,lambda)
