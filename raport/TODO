@@ -1,0 +1,23 @@
+introduction - task for the project, team name, say that we used methods learned in class and describe they performance on synthetic data we were given. Explain that paper consists of two independent sections for two datasets we got.
+
+1. classification
+- preparation:
+* normalization (we normalize at the beginning as all the methods we will be using either gain some power when normalized data is supplied or don't suffer any loss. Also it will be easier to later assume that all the data is normalized.)
+* randomly arrange order of columns and (then) rows, to prevent data to be maliciously arranged.
+* take some data (70?) and put it to vault - we do this to make sure to have accurate error estimates that we will provide, e.g. not bias because removal of outliers or using cross-validation.
+
+- explanatory data analysis:
+* boxdata - removal of outsiders (TODO: write code to remove everything further then ~2 from median)
+* paralellcoords - we took a look and decided that there are some features (9, 31, ...) that are separarating two classes much better than others
+* we also tried using it with PCA, but we got worse results, so we abandoned component analysis at all.
+
+- feature engineering (?)
+
+- algorithms 
+* explain that we use k-folds cross-validation (with what k?) to measure performance of all algorithms and finally choose the best one and count its 'real' errors using data in the vault
+
+* logistic regression (both using gradient descent and hessian descent)
+= it failed to converge both for all data and even when we counted it only for the 9-th input variable only (that is, reduced dimensionality to1) - figures. We expect that effect is due data separation, and we think that using penalized logistic regression will solve this issue.
+
+2. regression
+
