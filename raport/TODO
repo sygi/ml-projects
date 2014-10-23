@@ -7,7 +7,8 @@ introduction - task for the project, team name, say that we used methods learned
 * take some data (70?) and put it to vault - we do this to make sure to have accurate error estimates that we will provide, e.g. not bias because removal of outliers or using cross-validation.
 
 - explanatory data analysis:
-* boxdata - removal of outsiders (TODO: write code to remove everything further then ~2 from median)
+* boxdata - removal of outsiders
+* draw n^2 plots to see correlation (both for input and output)
 * paralellcoords - we took a look and decided that there are some features (9, 31, ...) that are separarating two classes much better than others
 * we also tried using it with PCA, but we got worse results, so we abandoned component analysis at all.
 
