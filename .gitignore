@@ -1,3 +1,5 @@
 .directory
 *~
 *.swp
+code/logisticRegressionM.m
+code/testM.m
