@@ -6,3 +6,4 @@
 *.out
 code/logisticRegressionM.m
 code/testM.m
+octave-workspace
