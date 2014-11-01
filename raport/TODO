@@ -3,7 +3,6 @@ introduction - task for the project, team name, say that we used methods learned
 1. classification
 - preparation:
 * normalization (we normalize at the beginning as all the methods we will be using either gain some power when normalized data is supplied or don't suffer any loss. Also it will be easier to later assume that all the data is normalized.)
-* randomly arrange order of columns and (then) rows, to prevent data to be maliciously arranged.
 * take some data (70?) and put it to vault - we do this to make sure to have accurate error estimates that we will provide, e.g. not bias because removal of outliers or using cross-validation.
 
 - explanatory data analysis:
