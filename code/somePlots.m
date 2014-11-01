@@ -1,6 +1,22 @@
 clear all;
 load('Toronto_classification');
 
+corX = corrcoef(X_train);
+figure(4);
+imagesc(corX);
+tit = title('corelation between input variables');
+preparePlot([tit]);
+print -dpdf imagesc_Xcorrelation.pdf;
+
+corY = corr(y_train,X_train);
+figure(3);
+bar(corY);
+hy = ylabel('correlation');
+hx = xlabel('numbeer of variable');
+preparePlot([hy,hx]);
+print -dpdf bar_ycorrelation.pdf;
+load('Toronto_classification');
+
 break;
 
 figure(1);
