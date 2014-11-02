@@ -1,5 +1,6 @@
 function beta = penLogisticRegression(y,tX,alpha,lambda, maxIter)
-%penLogisticRegression - penalized logistic regression using gradient descent
+%penLogisticRegression - penalized logistic regression using gradient
+%Newtons metod
 %
 %       beta = penLogisticRegression(y,tX,alpha,lambda)
 if ~exist('maxIter', 'var')
