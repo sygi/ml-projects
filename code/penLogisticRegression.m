@@ -13,7 +13,3 @@ for i = 1:maxIter
     beta = beta-alpha*gradient;
 end
 end
-
-function y = sigmoid(x)
-   y  = exp(x)./(1+exp(x));
-end

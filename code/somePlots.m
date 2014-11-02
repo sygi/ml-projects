@@ -1,6 +1,8 @@
 clear all;
 load('Toronto_classification');
 
+
+break;
 corX = corrcoef(X_train);
 figure(4);
 imagesc(corX);
