@@ -1,18 +1,17 @@
 clear all;
 load('classifNormalized');
-% Lambda = logspace(-2,2);
-lambda = 10;
-folds = 2:20;
-ERR = zeros(length(folds),2);
-for i = 1:length(folds);
+lambda = logspace(-2, 1);
+ERR = zeros(length(lambda),2);
+for i = 1:length(lambda)
+    lambda(i)
     for j = 1:10
-        ERR(i,:) = ERR(i, :) + crossValidation(myY_train,myX_train(:,:),folds(i),j,3,lambda);
+    ERR(i,:) = ERR(i,:) + crossValidation(myY_train,myX_train(:,:),2,j + 10*i,1,lambda(i));
     end
-    fprintf('one fold\n');
-    ERR(i, :) = ERR(i, :) / 10;
+    ERR(i,:) = ERR(i, :) / 10;
+    fprintf('one lambda\n');
 end
 
 figure;
-plot(folds,ERR(:,1),'LineWidth',2);
+semilogx(lambda,ERR(:,1),'LineWidth',2);
 hold on;
-plot(folds,ERR(:,2),'r','LineWidth',2);
+semilogx(lambda,ERR(:,2),'r','LineWidth',2);

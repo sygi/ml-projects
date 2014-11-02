@@ -14,8 +14,8 @@ beta = penLogisticRegression(y_train, X_train,alpha,lambda);
 %errTest = (y_test - sigmoid(X_test*beta))'*(y_test - sigmoid(X_test*beta))/size(y_test,1);
 %errTest = sqrt(errTest);
 
-errTrain = logError(X_train,y_train,beta);
-errTest = logError(X_test,y_test,beta);
+errTrain = rsmeError(X_train,y_train,beta);
+errTest = rsmeError(X_test,y_test,beta);
 Error = [errTrain,errTest];
 
 end
