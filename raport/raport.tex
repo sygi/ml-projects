@@ -75,7 +75,7 @@ To choose optimal value of $\lambda$, we used 10-fold cross-validation. We teste
 \begin{figure}[!t]
 \center
 
-\subfigure[Train and test error of ridge regression without transformations for different value of $\lambda$]{\includegraphics[width=2.5in]{../figures/classif/lambda-crop.pdf} \label{fig:lambda}}
+\subfigure[Train and test error of penalized logistic regression without transformations for different value of $\lambda$]{\includegraphics[width=2.5in]{../figures/classif/lambda-crop.pdf} \label{fig:lambda}}
 \hfill
 \subfigure[Comparison of train and test error for different value of $\lambda$ in model with absolute value of input variables]{\includegraphics[width=2.5in]{../figures/classif/lambda_abs-crop.pdf} \label{fig:lambda-abs}}
 \caption{}
@@ -85,10 +85,10 @@ To choose optimal value of $\lambda$, we used 10-fold cross-validation. We teste
 Later, we tried various feature transformations. We mention the ones which did not get any improvement in no significant order:
 \begin{itemize}
 
-\item running ridge regression for only some ($\{1, 9, 16, 27, 33\}$) of input variables with biggest correlation to the output variable
-\item running ridge regression for subset of variables and their squares and square roots
-\item ridge regression with all input variables and their square roots
-\item ridge regression with all input variables and their cubes
+\item running penalized logistic regression for only some ($\{1, 9, 16, 27, 33\}$) of input variables with biggest correlation to the output variable
+\item penalized log. regression for subset of variables and their squares and square roots
+\item penalized log. regression with all input variables and their square roots
+\item penalized log. regression with all input variables and their cubes
 \end{itemize}
 
 On the other hand, we got similiar improvement (logistic error went down to around $0.15$) for both adding squares and absolute value of every input variable. The result of cross-validation for different $\lambda$ and all variables and their absolute value is shown on figure \ref{fig:lambda-abs}. As expected, we observe increase in test error for small value of $\lambda$ (variance), but overall, for $\lambda = 0.5$ we get a better model then before and this is the model we used to predict unknown ouput for out test dataset.
@@ -107,17 +107,43 @@ For the regression problem, we got input data matrix $X$ with $N=1400$ data samp
 \center
 \subfigure[Boxplot of original input data $\mathbf{X}$. Data is not normalized and categorical variables are not separated]{\includegraphics[width=2.5in]{../figures/boxplot_before_r-crop.pdf} \label{fig:boxplot_reg_before}}
 \hfill
-\subfigure[Correlation of input variables with the output variable]{\includegraphics[width=2.5in]{../figures/classif/boxplot_after-crop.pdf} \label{fig:correlation}}
+\subfigure[Correlation of input variables with the output variable]{\includegraphics[width=2.5in]{../figures/correlation-crop.pdf} \label{fig:correlation}}
 \caption{}
 \end{figure}
 \begin{subsubsection}{Dummy encoding}
 First procedure which we applied to our data is dummy encoding of categorical variables. After changing variables to binary, we had matrix $X$ with $80$ columns but only $67$ rank, which means that there was some redundancy in categorical variables. To avoid problems with ill-conditioning, we chose $67$ linearly independent columns of $X$ and discarded others.
 \end{subsubsection}
 
-\begin{subsection}{Data analysis}
-We took a look at the correlation between input variables, and there was not much correlation. More interesting was correlation of each input variable with the output one, which is shown on the figure \ref{fig:correlation}
+Further, we normalized the data and removed sample case \#$500$ as an outlier.
 \end{subsection}
-
+\begin{subsection}{Data analysis}
+We took a look at the correlation between input variables, and there was not much correlation. More interesting was correlation of each input variable with the output one, which is shown on the figure \ref{fig:correlation}. We clearly see that there's a big correlation between $38$-th input variable and our output, but if we took a look at the plot of this variable vs $y$ (fig. \ref{38-cor}) we see that data is in fact clustered and big correlation may not guide us to very good predictions.
+\begin{figure}[!h]
+\center
+\subfigure[Plot of $38$-th input variable vs output variable. We see the clusterization of the data separated. Fit is good for one cluster, but not for the second one.]{\includegraphics[width=2.5in]{../figures/variable38-crop.pdf} \label{fig:38-cor}}
+\hfill
+\subfigure[TODO]{\includegraphics[width=2.5in]{../figures/correlation-crop.pdf} \label{fig:correlation}}
+\caption{}
+\end{figure}
+\end{subsection}
+\begin{subsection}{Least squares and feature transformations}
+We started by analysing the behaviour of least squares under $10$-fold cross-validation. We run each testing case for $10$ choices of seeds and averaged the results. Testing cases were:
+\begin{itemize}
+\item all input variables, like we got them: $rsme=641$
+\item all input variables and squares of continuous ones ($\{1, \ldots, 38\}$), $rsme = 546$
+\item only continuous variables and their squares: $rsme = 471$
+\item only continuous variables, their squares and square roots: $rsme = 469$
+\end{itemize}
+This was not very suprising, as:
+\begin{enumerate}
+\item we had badly conditioned matrix $X$, only because of our discrete variables, which could lead to computational errors when solving normal equations with all variables,
+\item discrete variables were very lightly correlated with output variable, so removing them did not made us lost much of information.
+\end{enumerate}
+\end{subsection}
+\begin{subsection}{Gradient descent}
+Running gradient descent for this dataset was problematic. We for step size $\alpha > 0.2$ it did not converge, and at the same time it was taking a lot of time to converge using smaller step sizes. Removing discrete variables again helped, and we managed to make it converge using continuous variables and their squares by making even smaller step size, but results were very similar to those achieved by using normal equations, so we decided to not use gradient descent later.
+\end{subsection}
+\begin{subsection}{Rigde regression}
 \end{subsection}
 \end{section}
 
