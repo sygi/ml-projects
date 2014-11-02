@@ -101,14 +101,23 @@ We also tried to fit (builtin) SVM model for our problem. Unfortunately, when we
 \end{section}
 \begin{section}{Regresssion}
 \begin{subsection}{Data preparation}
-how many variables, which are which, not normalized, dummy encoding
+For the regression problem, we got input data matrix $X$ with $N=1400$ data samples and $D = 52$ input variables. First $38$ of input variables are continuous, last $14$ are discrete, with more than $2$ categories. $X$ matrix is again full-rank. Figure \ref{fig:boxplot_reg_before} shows that data is again not normalized, especially $38$-th column. 
+
 \begin{figure}[!h]
 \center
-\subfigure[Boxplot of original input data $\mathbf{X}$. Data is not centered and therefore we normalize it. TODO]{\includegraphics[width=2.5in]{../figures/boxplot_before_r-crop.pdf} \label{fig:boxplotBefore}}
+\subfigure[Boxplot of original input data $\mathbf{X}$. Data is not normalized and categorical variables are not separated]{\includegraphics[width=2.5in]{../figures/boxplot_before_r-crop.pdf} \label{fig:boxplot_reg_before}}
 \hfill
-\subfigure[Boxplot of input data after normalization and removing outliers.]{\includegraphics[width=2.5in]{../figures/classif/boxplot_after-crop.pdf} \label{fig:boxplotAfter}}
+\subfigure[Correlation of input variables with the output variable]{\includegraphics[width=2.5in]{../figures/classif/boxplot_after-crop.pdf} \label{fig:correlation}}
 \caption{}
 \end{figure}
+\begin{subsubsection}{Dummy encoding}
+First procedure which we applied to our data is dummy encoding of categorical variables. After changing variables to binary, we had matrix $X$ with $80$ columns but only $67$ rank, which means that there was some redundancy in categorical variables. To avoid problems with ill-conditioning, we chose $67$ linearly independent columns of $X$ and discarded others.
+\end{subsubsection}
+
+\begin{subsection}{Data analysis}
+We took a look at the correlation between input variables, and there was not much correlation. More interesting was correlation of each input variable with the output one, which is shown on the figure \ref{fig:correlation}
+\end{subsection}
+
 \end{subsection}
 \end{section}
 
