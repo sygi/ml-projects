@@ -122,7 +122,7 @@ We took a look at the correlation between input variables, and there was not muc
 \center
 \subfigure[Plot of $38$-th input variable vs output variable. We see the clusterization of the data separated. Fit is good for one cluster, but not for the second one.]{\includegraphics[width=2.5in]{../figures/variable38-crop.pdf} \label{fig:38-cor}}
 \hfill
-\subfigure[TODO]{\includegraphics[width=2.5in]{../figures/correlation-crop.pdf} \label{fig:correlation}}
+\subfigure[Train and test error for different values of $\lambda$ in ridge regression. We see that penalizing big $\beta$ values is not justified.]{\includegraphics[width=2.5in]{../figures/ridge-crop.pdf} \label{fig:ridge}}
 \caption{}
 \end{figure}
 \end{subsection}
@@ -132,7 +132,7 @@ We started by analysing the behaviour of least squares under $10$-fold cross-val
 \item all input variables, like we got them: $rsme=641$
 \item all input variables and squares of continuous ones ($\{1, \ldots, 38\}$), $rsme = 546$
 \item only continuous variables and their squares: $rsme = 471$
-\item only continuous variables, their squares and square roots: $rsme = 469$
+\item only continuous variables, their squares and fourth powers: $rsme = 469$
 \end{itemize}
 This was not very suprising, as:
 \begin{enumerate}
@@ -142,8 +142,17 @@ This was not very suprising, as:
 \end{subsection}
 \begin{subsection}{Gradient descent}
 Running gradient descent for this dataset was problematic. We for step size $\alpha > 0.2$ it did not converge, and at the same time it was taking a lot of time to converge using smaller step sizes. Removing discrete variables again helped, and we managed to make it converge using continuous variables and their squares by making even smaller step size, but results were very similar to those achieved by using normal equations, so we decided to not use gradient descent later.
+
 \end{subsection}
 \begin{subsection}{Rigde regression}
+We tried to fit ridge regression for different values of $\lambda$ and tried various feature transformations. It turned out (fig. \ref{fig:ridge}) that model works best when $\lambda$ is set to zero and features are chosen the same way as with least squares method. Amongst others, we also tried fitting ridge regression to all continuous variables and their pairwise multiplication pairs, but we made our model overfitting, as shown in the figure \ref{fig:ridgeAllPairs}.
+\begin{figure}[!h]
+\center
+\subfigure[Errors for ridge regression model with all second order terms. Big difference of train and test error tells us that our model has big variance.]{\includegraphics[width=2.5in]{../figures/ridgeAllPairs-crop.pdf} \label{fig:ridgeAllPairs}}
+\hfill
+%\subfigure[Train and test error for different values of $\lambda$ in ridge regression. We see that penalizing big $\beta$ values is not justified.]{\includegraphics[width=2.5in]{../figures/ridge-crop.pdf} \label{fig:ridge}}
+\caption{}
+\end{figure}
 \end{subsection}
 \end{section}
 
