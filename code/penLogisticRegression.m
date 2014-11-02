@@ -10,6 +10,10 @@ end
 beta = zeros(D,1);
 for i = 1:maxIter
     gradient = (-tX'*(y - sigmoid(tX*beta))+lambda*beta)/N;
+    if norm(gradient) < 10e-5
+        fprintf('finished early\n');
+        return;
+    end
     beta = beta-alpha*gradient;
 end
 end

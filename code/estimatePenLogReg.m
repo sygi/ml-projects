@@ -1,5 +1,5 @@
 function Error = estimatePenLogReg(Xtr,y_train,Xte,y_test,alpha,lambda)
-%ESTIMATE - train penalised logistic regresion used X_train and y_train 
+%ESTIMATE - train penalized logistic regresion used Xtr and y_train 
 %and estimate y_test 
 % 
 %   estimatePenLogReg(X_train,y_train,X_test,y_test,alpha,lambda, maxIter)
