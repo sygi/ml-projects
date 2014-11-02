@@ -34,9 +34,9 @@ After these procedures, we end up with normalized data shown on figure \ref{fig:
 
 \begin{figure}[!h]
 \center
-\subfigure[Boxplot of original input data $\mathbf{X}$. Data is not centered and therefore we normalize it.]{\includegraphics[width=2.5in]{../figures/boxplot_before-crop.pdf} \label{fig:boxplotBefore}}
+\subfigure[Boxplot of original input data $\mathbf{X}$. Data is not centered and therefore we normalize it.]{\includegraphics[width=2.5in]{../figures/classif/boxplot_before-crop.pdf} \label{fig:boxplotBefore}}
 \hfill
-\subfigure[Boxplot of input data after normalization and removing outliers.]{\includegraphics[width=2.5in]{../figures/boxplot_after-crop.pdf} \label{fig:boxplotAfter}}
+\subfigure[Boxplot of input data after normalization and removing outliers.]{\includegraphics[width=2.5in]{../figures/classif/boxplot_after-crop.pdf} \label{fig:boxplotAfter}}
 \caption{}
 \end{figure}
 
@@ -46,9 +46,9 @@ We investigated correlation between different input variables and an output vari
 
 \begin{figure}[!t]
 \center
-\subfigure[Correlation between input variables and output variable. Some variables have much bigger correlation to the output variable than the others.]{\includegraphics[width=2.5in]{../figures/bar_ycorrelation-crop.pdf} \label{fig:correlation}}
+\subfigure[Correlation between input variables and output variable. Some variables have much bigger correlation to the output variable than the others.]{\includegraphics[width=2.5in]{../figures/classif/bar_ycorrelation-crop.pdf} \label{fig:correlation}}
 \hfill
-\subfigure[Data transformation using PCA. Big correlation of some input variables with $y$ is lost.]{\includegraphics[width=2.5in]{../figures/parallelcoords-pca-crop.pdf} \label{fig:pca}}
+\subfigure[Data transformation using PCA. Big correlation of some input variables with $y$ is lost.]{\includegraphics[width=2.5in]{../figures/classif/parallelcoords-pca-crop.pdf} \label{fig:pca}}
 \caption{}
 \end{figure}
 
@@ -61,23 +61,55 @@ Unfortunately even in this setting algorithm did not converge (figure \ref{fig:g
 \begin{figure}[!t]
 \center
 
-\subfigure[Prediction of output variable based only on $9$-th input variable.]{\includegraphics[width=2.5in]{../figures/gd-prediction-crop.pdf} \label{fig:gdPrediction}}
+\subfigure[Prediction of output variable based only on $9$-th input variable.]{\includegraphics[width=2.5in]{../figures/classif/gd-prediction-crop.pdf} \label{fig:gdPrediction}}
 \hfill
-\subfigure[Gradient norm in unpenalized gradient descent. Algorithm does not converge.]{\includegraphics[width=2.5in]{../figures/gradient9-crop.pdf} \label{fig:gdGradient}}
+\subfigure[Gradient norm in unpenalized gradient descent. Algorithm does not converge.]{\includegraphics[width=2.5in]{../figures/classif/gradient9-crop.pdf} \label{fig:gdGradient}}
 \caption{}
 \end{figure}
 \end{subsubsection}
 \begin{subsubsection}{Penalized logistic regression}
 We did a lot of experiments using penalized logistic regression. As converging using gradient descent was slow, we wrote a Hessian-based version. 
 
-To choose optimal value of $\lambda$, we used 10-fold cross-validation. We tested $200$ candidates in logspace between $10^{-2}$ to $10^2$. Figure [fig. here] shows the result: optimal lambda was $\lambda = 0.8$ with test error around $1.9$
+To choose optimal value of $\lambda$, we used 10-fold cross-validation. We tested $200$ candidates in logspace between $10^{-2}$ to $10^2$. Figure \ref{fig:lambda} shows the result: optimal lambda was $\lambda = 0.8$ with test error around $0.19$
+
+\begin{figure}[!t]
+\center
+
+\subfigure[Train and test error of ridge regression without transformations for different value of $\lambda$]{\includegraphics[width=2.5in]{../figures/classif/lambda-crop.pdf} \label{fig:lambda}}
+\hfill
+\subfigure[Comparison of train and test error for different value of $\lambda$ in model with absolute value of input variables]{\includegraphics[width=2.5in]{../figures/classif/lambda_abs-crop.pdf} \label{fig:lambda-abs}}
+\caption{}
+\end{figure}
+
+\begin{subsubsection}{Feature transformations}
+Later, we tried various feature transformations. We mention the ones which did not get any improvement in no significant order:
+\begin{itemize}
+
+\item running ridge regression for only some ($\{1, 9, 16, 27, 33\}$) of input variables with biggest correlation to the output variable
+\item running ridge regression for subset of variables and their squares and square roots
+\item ridge regression with all input variables and their square roots
+\item ridge regression with all input variables and their cubes
+\end{itemize}
+
+On the other hand, we got similiar improvement (logistic error went down to around $0.15$) for both adding squares and absolute value of every input variable. The result of cross-validation for different $\lambda$ and all variables and their absolute value is shown on figure \ref{fig:lambda-abs}. As expected, we observe increase in test error for small value of $\lambda$ (variance), but overall, for $\lambda = 0.5$ we get a better model then before and this is the model we used to predict unknown ouput for out test dataset.
 \end{subsubsection}
-\begin{subsubsection}{SVM?}
+\end{subsubsection}
+\begin{subsubsection}{SVM}
+We also tried to fit (builtin) SVM model for our problem. Unfortunately, when we chose only a subset of input variables we got bigger error then before, and when we tried to fit SVMs for all input data, training never finished. Changing the kernel didn't help.
 \end{subsubsection}
 \end{subsection}
 \end{section}
-
 \begin{section}{Regresssion}
+\begin{subsection}{Data preparation}
+how many variables, which are which, not normalized, dummy encoding
+\begin{figure}[!h]
+\center
+\subfigure[Boxplot of original input data $\mathbf{X}$. Data is not centered and therefore we normalize it. TODO]{\includegraphics[width=2.5in]{../figures/boxplot_before_r-crop.pdf} \label{fig:boxplotBefore}}
+\hfill
+\subfigure[Boxplot of input data after normalization and removing outliers.]{\includegraphics[width=2.5in]{../figures/classif/boxplot_after-crop.pdf} \label{fig:boxplotAfter}}
+\caption{}
+\end{figure}
+\end{subsection}
 \end{section}
 
 \end{document}
