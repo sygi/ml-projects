@@ -1,23 +1,28 @@
 clear all;
-load('Toronto_classification');
+load('Toronto_regression');
+load('reg_dummy');
 
-
-break;
-corX = corrcoef(X_train);
+corX = corrcoef(myX_train);
 figure(4);
 imagesc(corX);
+colorbar;
 tit = title('Corelation between input variables');
 preparePlot([tit]);
 print -dpdf imagesc_Xcorrelation.pdf;
 
-corY = corr(y_train,X_train);
+%to remove 50,55,67,77
+
+corY = corr(y_train,myX_train);
 figure(3);
 bar(corY);
 hy = ylabel('correlation with $y$');
 hx = xlabel('input variable');
 preparePlot([hy,hx]);
 print -dpdf bar_ycorrelation.pdf;
-load('Toronto_classification');
+
+
+break;
+
 
 figure(1);
 boxplot(X_train, 'orientation', 'horizontal');
