@@ -15,7 +15,7 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-    This raport describes our work on first project done for Machine Learning class at EPFL in Fall 2014. We were given two synthetic datasets - a regression and a classification one and used methods learnt in the class to train few models and predict regression and classification outcome for the test data we got. 
+This raport describes our work on first project done for Machine Learning class at EPFL in Fall 2014. We were given two synthetic datasets - a regression and a classification one and used methods learnt in the class to train few models and predicted regression and classification outcome for the test data we got. For classification, we tried fitting logistic regression, its penalized version and SVM. We achieved the best test error for penalized logistic regression with all input variables and their absolute values. For regression, we found out our data matrix is ill conditioned, the reason of which were discrete input variables. We removed them and then fit least squares with both gradient descent and normal equations and ridge regression. Ridge regression did not give us significant improvement over least squares and we used the latter model to predict the outcomes.
 \end{abstract}
 
 \begin{section}{Classification}
@@ -79,7 +79,7 @@ Later, we tried various feature transformations. We mention the ones which did n
 \item penalized log. regression with all input variables and their cubes
 \end{itemize}
 
-On the other hand, we got similiar improvement (logistic error went down to around $0.15$) for both adding squares and absolute value of every input variable. The result of cross-validation for different $\lambda$ and all variables and their absolute value is shown on figure \ref{fig:lambda-abs}. As expected, we observe increase in test error for small value of $\lambda$ (variance), but overall, for $\lambda = 0.5$ we get a better model then before and this is the model we used to predict unknown ouput for out test dataset.
+On the other hand, we got similiar improvement (logistic error went down to around $0.15$) for both adding squares and absolute value of every input variable. The result of cross-validation for different $\lambda$ and all variables and their absolute value is shown on figure \ref{fig:lambda-abs}. As expected, we observe increase in test error for small value of $\lambda$ (variance), but overall, for $\lambda = 0.5$.
 \end{subsubsection}
 \end{subsubsection}
 \begin{subsubsection}{SVM}
@@ -87,6 +87,7 @@ We also tried to fit (builtin) SVM model for our problem. Unfortunately, when we
 \end{subsubsection}
 \end{subsection}
 \begin{subsection}{Summary}
+After fitting the mentioned models, we found out that most of input variables have an inpact on predicting the outcome $y$. Our logistic regression test error ($0.18$) was on average bigger than the penalized regression one ($0.15$), so we decided to use penalized logistic regression to predict the unknown outcomes. We did not managed to make SVM work for all the features due to its computational complexity.
 \end{subsection}
 \end{section}
 \begin{section}{Regresssion}
@@ -145,6 +146,7 @@ We tried to fit ridge regression for different values of $\lambda$ and tried var
 \end{figure}
 \end{subsection}
 \begin{subsection}{Summary}
+We found out that using of discrete input variables in predicting the regression outcome increases the error and makes the matrix ill-conditioned. We dropped this variables completely and fit the least squares using normal equations and gradient descent and ridge regression for different values of $\lambda$. It turned out that all predictors (on model with input variables, their squares and $4$-th powers) give the same rsme test error of $442$, with the remark that convering gradient descent was hard due to setting the step size. Even in ridge regression, adding more variables guided us to overfitting. We finally used the normal equations predictor as the lightest computationally one.
 \end{subsection}
 \end{section}
 
