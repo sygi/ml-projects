@@ -1,7 +1,5 @@
 function beta = leastSquaresGD(y,tX,alpha,maxIter)
 %leastSquaresGD - least squares using gradient descent 
-%
-%   some comment
 %   
 %   beta = leastSquaresGD(y,tX,alpha)
 %   beta = leastSquaresGD(y,tX,alpha,maxIter)
