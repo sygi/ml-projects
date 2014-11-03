@@ -137,7 +137,7 @@ Running gradient descent for this dataset was problematic. We for step size $\al
 
 \end{subsection}
 \begin{subsection}{Rigde regression}
-We tried to fit ridge regression for different values of $\lambda$ and tried various feature transformations. It turned out (fig. \ref{fig:ridge}) that model works best when $\lambda$ is set to zero and features are chosen the same way as with least squares method. Amongst others, we also tried fitting ridge regression to all continuous variables and their pairwise multiplication pairs, but we made our model overfitting, as shown in the figure \ref{fig:ridgeAllPairs}.
+We tried to fit ridge regression for different values of $\lambda$ and tried various feature transformations. It turned out (fig. \ref{fig:ridge}) that model works best when $\lambda$ is set to zero and features are chosen the same way as with least squares method. Amongst others, we also tried fitting ridge regression to all continuous variables and their polynomials of degree two, but we made our model overfitting, as shown in the figure \ref{fig:ridgeAllPairs}.
 \begin{figure}[!h]
 \center
 \subfigure[Errors for ridge regression model with all second order terms. Big difference of train and test error tells us that our model has big variance.]{\includegraphics[width=2.5in]{../figures/ridgeAllPairs-crop.pdf} \label{fig:ridgeAllPairs}}
