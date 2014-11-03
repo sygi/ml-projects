@@ -17,9 +17,6 @@
 \begin{abstract}
     This raport describes our work on first project done for Machine Learning class at EPFL in Fall 2014. We were given two synthetic datasets - a regression and a classification one and used methods learnt in the class to train few models and predict regression and classification outcome for the test data we got. 
 \end{abstract}
-\begin{section}{Text structure - usunac?}
-As the two tasks - regression and classification are independent of each other, we split the raport into two sections.
-\end{section}
 
 \begin{section}{Classification}
 \begin{subsection}{Data preparation}
@@ -55,22 +52,13 @@ We investigated correlation between different input variables and an output vari
 \end{subsection}
 \begin{subsection}{Predicting models}
 \begin{subsubsection}{Logistic regression using gradient descent}
-First model we tried to fit was simple logistic regression (using Newton's method with Hessian). As we had problems with converging it for when using all input variables, we decided to try to fit it using only $9$-th input variable (the one with biggest correlation with output). 
+First model we tried to fit was simple logistic regression (using Newton's method with Hessian). Using $10$-fold cross-validation, we achieved mean logistic test error of $0.2301$. The results had big variance. We later tried to fit the model using only $9$-th input variable (the one with biggest correlation with output), but it got worse test error.
 
-Unfortunately even in this setting algorithm did not converge (figure \ref{fig:gdGradient}), because it tried to fit vertical line ($\beta_1$ was going to infinity), but the found model provided reasonable predictions (fig. \ref{fig:gdPrediction}).
-\begin{figure}[!t]
-\center
-
-\subfigure[Prediction of output variable based only on $9$-th input variable.]{\includegraphics[width=2.5in]{../figures/classif/gd-prediction-crop.pdf} \label{fig:gdPrediction}}
-\hfill
-\subfigure[Gradient norm in unpenalized gradient descent. Algorithm does not converge.]{\includegraphics[width=2.5in]{../figures/classif/gradient9-crop.pdf} \label{fig:gdGradient}}
-\caption{}
-\end{figure}
 \end{subsubsection}
 \begin{subsubsection}{Penalized logistic regression}
-We did a lot of experiments using penalized logistic regression. As converging using gradient descent was slow, we wrote a Hessian-based version. 
+We did a lot of experiments using penalized logistic regression. As converging using gradient descent was slow, we wrote a Hessian-based version.
 
-To choose optimal value of $\lambda$, we used 10-fold cross-validation. We tested $200$ candidates in logspace between $10^{-2}$ to $10^2$. Figure \ref{fig:lambda} shows the result: optimal lambda was $\lambda = 0.8$ with test error around $0.19$
+To choose optimal value of $\lambda$, we used $10$-fold cross-validation. We tested $200$ candidates in logspace between $10^{-2}$ to $10^2$. Figure \ref{fig:lambda} shows the result: optimal lambda was $\lambda = 0.8$ with test error around $0.19$.
 
 \begin{figure}[!t]
 \center
