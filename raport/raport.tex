@@ -58,7 +58,7 @@ First model we tried to fit was simple logistic regression (using Newton's metho
 \begin{subsubsection}{Penalized logistic regression}
 We did a lot of experiments using penalized logistic regression. As converging using gradient descent was slow, we wrote a Hessian-based version.
 
-To choose optimal value of $\lambda$, we used $10$-fold cross-validation. We tested $200$ candidates in logspace between $10^{-2}$ to $10^2$. Figure \ref{fig:lambda} shows the result: optimal lambda was $\lambda = 0.8$ with test error around $0.19$.
+To choose optimal value of $\lambda$, we used $10$-fold cross-validation. We tested $200$ candidates in logspace between $10^{-2}$ to $10^2$. Figure \ref{fig:lambda} shows the result: optimal lambda was $\lambda = 0.8$ with test error around $0.18$.
 
 \begin{figure}[!t]
 \center
@@ -73,13 +73,13 @@ To choose optimal value of $\lambda$, we used $10$-fold cross-validation. We tes
 Later, we tried various feature transformations. We mention the ones which did not get any improvement in no significant order:
 \begin{itemize}
 
-\item running penalized logistic regression for only some ($\{1, 9, 16, 27, 33\}$) of input variables with biggest correlation to the output variable
-\item penalized log. regression for subset of variables and their squares and square roots
-\item penalized log. regression with all input variables and their square roots
-\item penalized log. regression with all input variables and their cubes
+\item penalized logistic regression for only some ($\{1, 9, 16, 27, 33\}$) of input variables with biggest correlation to the output variable
+\item penalized logistic regression for subset of variables and their squares and square roots
+\item penalized logistic regression with all input variables and their square roots
+\item penalized logistic regression with all input variables and their cubes
 \end{itemize}
 
-On the other hand, we got similiar improvement (logistic error went down to around $0.15$) for both adding squares and absolute value of every input variable. The result of cross-validation for different $\lambda$ and all variables and their absolute value is shown on figure \ref{fig:lambda-abs}. As expected, we observe increase in test error for small value of $\lambda$ (variance), but overall, for $\lambda = 0.5$.
+Finaly, we got similiar improvement (logistic error went down to around $0.15$) for both adding squares and adding absolute value of every input variable. The result of cross-validation for different $\lambda$ and all variables and their absolute value is shown on figure \ref{fig:lambda-abs}. As expected, we observe increase in test error for small value of $\lambda$ (variance), but overall, for $\lambda = 0.5$ we get a better model then before.
 \end{subsubsection}
 \end{subsubsection}
 \begin{subsubsection}{SVM}
@@ -108,7 +108,7 @@ First procedure which we applied to our data is dummy encoding of categorical va
 Further, we normalized the data and removed sample case \#$500$ as an outlier.
 \end{subsection}
 \begin{subsection}{Data analysis}
-We took a look at the correlation between input variables, and there was not much correlation. More interesting was correlation of each input variable with the output one, which is shown on the figure \ref{fig:correlation}. We clearly see that there's a big correlation between $38$-th input variable and our output, but if we took a look at the plot of this variable vs $y$ (fig. \ref{38-cor}) we see that data is in fact clustered and big correlation may not guide us to very good predictions.
+We took a look at the correlation between input variables, and there was not much correlation. More interesting was correlation of each input variable with the output one, which is shown on the figure \ref{fig:correlation}. We clearly see that there's a big correlation between $38$-th input variable and our output, but if we took a look at the plot of this variable vs $y$ (fig. \ref{fig:38-cor}) we see that data is in fact clustered and big correlation may not guide us to very good predictions.
 \begin{figure}[!h]
 \center
 \subfigure[Plot of $38$-th input variable vs output variable. We see the clusterization of the data separated. Fit is good for one cluster, but not for the second one.]{\includegraphics[width=2.5in]{../figures/variable38-crop.pdf} \label{fig:38-cor}}
@@ -123,13 +123,14 @@ We started by analysing the behaviour of least squares under $10$-fold cross-val
 \item all input variables, like we got them: $rsme=641$
 \item all input variables and squares of continuous ones ($\{1, \ldots, 38\}$), $rsme = 546$
 \item only continuous variables and their squares: $rsme = 471$
-\item only continuous variables, their squares and fourth powers: $rsme = 469$
+\item only continuous variables, their squares and fourth powers: $rsme = 442$
 \end{itemize}
 This was not very suprising, as:
 \begin{enumerate}
 \item we had badly conditioned matrix $X$, only because of our discrete variables, which could lead to computational errors when solving normal equations with all variables,
 \item discrete variables were very lightly correlated with output variable, so removing them did not made us lost much of information.
 \end{enumerate}
+In the same time we big variation depending on division of data in cross-validation, that is depending on seed. So we tried to average error over many cross-validations. 
 \end{subsection}
 \begin{subsection}{Gradient descent}
 Running gradient descent for this dataset was problematic. We for step size $\alpha > 0.2$ it did not converge, and at the same time it was taking a lot of time to converge using smaller step sizes. Removing discrete variables again helped, and we managed to make it converge using continuous variables and their squares by making even smaller step size, but results were very similar to those achieved by using normal equations, so we decided to not use gradient descent later.
