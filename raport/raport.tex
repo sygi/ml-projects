@@ -25,7 +25,7 @@ Our dataset consists of train data, for which we have both input variables $X$ a
 Both original train and test data sets included $N=1500$ samples, each has $33$ dimensions. All except $3$-rd input variable are continuous, $3$-rd is a binary one. Our $X_train$ matrix has full-rank, so we don't expect one input variable to be a linear function of other ones. 
 Data we got was not normalized, as shown in figure \ref{fig:boxplotBefore}, so we decided to normalize it. We also normalized test data using same means and standard deviations. After that, we randomly a subset of $N=70$ data samples to leave it aside and use it at the end to estimate RSME error without being biased because of using cross-validation. 
 
-Figure \ref{fig:boxplotBefore} shows also that our data is not free of outliers. We decided to remove from dataset all samples that have absolute value of any input variable $\ge 5$ standard deviations of this input variable.
+Figure \ref{fig:boxplotBefore} shows also that our data is not free of outliers. We decided to remove from dataset all samples that have absolute value of any input variable $\ge 5$ standard deviations of this input variable (after normalization).
 
 After these procedures, we end up with normalized data shown on figure \ref{fig:boxplotAfter}. There was $N=1284$ data samples left available to train our model.
 
@@ -39,7 +39,7 @@ After these procedures, we end up with normalized data shown on figure \ref{fig:
 
 \end{subsection}
 \begin{subsection}{Data analysis}
-We investigated correlation between different input variables and an output variable and amongst input variables themselves. Figure \ref{fig:correlation} shows that some variables are clearly more correlated to the output then the others. While building models we sometimes tried to create them only using few most correlated variables. On the other hand, we found no interesting correlation between input variables. We also tried to apply PCA to extract principal components of the data, but we found that particular principal components are not so well correlated with output variable, so we abandoned this path and did not use PCA later.
+We investigated correlation between different input variables and an output variable and amongst input variables themselves. Figure \ref{fig:correlation} shows that some variables are clearly more correlated to the output then the others. While building models we sometimes tried to create them only using few most correlated variables. On the other hand, we found no interesting correlation between input variables. We also tried to apply PCA to extract principal components of the data, but we found that particular principal components are not so well correlated with output variable (see fig. \ref{fig:pca}), so we abandoned this path and did not use PCA later.
 
 \begin{figure}[!t]
 \center
@@ -58,7 +58,7 @@ First model we tried to fit was simple logistic regression (using Newton's metho
 \begin{subsubsection}{Penalized logistic regression}
 We did a lot of experiments using penalized logistic regression. As converging using gradient descent was slow, we wrote a Hessian-based version.
 
-To choose optimal value of $\lambda$, we used $10$-fold cross-validation. We tested $200$ candidates in logspace between $10^{-2}$ to $10^2$. Figure \ref{fig:lambda} shows the result: optimal lambda was $\lambda = 0.8$ with test error around $0.18$.
+To choose optimal value of $\lambda$, we used $10$-fold cross-validation. We tested $200$ candidates in logspace between $10^{-2}$ to $10^2$. Figure \ref{fig:lambda} shows the result: optimal lambda was $\lambda = 0.8$ with test error around $0.19$.
 
 \begin{figure}[!t]
 \center
@@ -73,13 +73,13 @@ To choose optimal value of $\lambda$, we used $10$-fold cross-validation. We tes
 Later, we tried various feature transformations. We mention the ones which did not get any improvement in no significant order:
 \begin{itemize}
 
-\item penalized logistic regression for only some ($\{1, 9, 16, 27, 33\}$) of input variables with biggest correlation to the output variable
-\item penalized logistic regression for subset of variables and their squares and square roots
-\item penalized logistic regression with all input variables and their square roots
-\item penalized logistic regression with all input variables and their cubes
+\item running penalized logistic regression for only some ($\{1, 9, 16, 27, 33\}$) of input variables with biggest correlation to the output variable
+\item penalized log. regression for subset of variables and their squares and square roots
+\item penalized log. regression with all input variables and their square roots
+\item penalized log. regression with all input variables and their cubes
 \end{itemize}
 
-Finaly, we got similiar improvement (logistic error went down to around $0.15$) for both adding squares and adding absolute value of every input variable. The result of cross-validation for different $\lambda$ and all variables and their absolute value is shown on figure \ref{fig:lambda-abs}. As expected, we observe increase in test error for small value of $\lambda$ (variance), but overall, for $\lambda = 0.5$ we get a better model then before.
+On the other hand, we got similiar improvement (logistic error went down to around $0.15$) for both adding squares and absolute value of every input variable. The result of cross-validation for different $\lambda$ and all variables and their absolute value is shown on figure \ref{fig:lambda-abs}. As expected, we observe increase in test error for small value of $\lambda$ (variance), but overall, for $\lambda = 0.5$.
 \end{subsubsection}
 \end{subsubsection}
 \begin{subsubsection}{SVM}
@@ -98,7 +98,7 @@ For the regression problem, we got input data matrix $X$ with $N=1400$ data samp
 \center
 \subfigure[Boxplot of original input data $\mathbf{X}$. Data is not normalized and categorical variables are not separated]{\includegraphics[width=2.5in]{../figures/boxplot_before_r-crop.pdf} \label{fig:boxplot_reg_before}}
 \hfill
-\subfigure[Correlation of input variables with the output variable]{\includegraphics[width=2.5in]{../figures/correlation-crop.pdf} \label{fig:correlation}}
+\subfigure[Correlation of input variables with the output variable]{\includegraphics[width=2.5in]{../figures/correlation-crop.pdf} \label{fig:correlationReg}}
 \caption{}
 \end{figure}
 \begin{subsubsection}{Dummy encoding}
@@ -108,7 +108,7 @@ First procedure which we applied to our data is dummy encoding of categorical va
 Further, we normalized the data and removed sample case \#$500$ as an outlier.
 \end{subsection}
 \begin{subsection}{Data analysis}
-We took a look at the correlation between input variables, and there was not much correlation. More interesting was correlation of each input variable with the output one, which is shown on the figure \ref{fig:correlation}. We clearly see that there's a big correlation between $38$-th input variable and our output, but if we took a look at the plot of this variable vs $y$ (fig. \ref{fig:38-cor}) we see that data is in fact clustered and big correlation may not guide us to very good predictions.
+We took a look at the correlation between input variables, and there was not much correlation. More interesting was correlation of each input variable with the output one, which is shown on the figure \ref{fig:correlationReg}. We clearly see that there's a big correlation between $38$-th input variable and our output, but if we took a look at the plot of this variable vs $y$ (fig. \ref{fig:38-cor}) we see that data is in fact clustered and big correlation may not guide us to very good predictions.
 \begin{figure}[!h]
 \center
 \subfigure[Plot of $38$-th input variable vs output variable. We see the clusterization of the data separated. Fit is good for one cluster, but not for the second one.]{\includegraphics[width=2.5in]{../figures/variable38-crop.pdf} \label{fig:38-cor}}
@@ -123,21 +123,20 @@ We started by analysing the behaviour of least squares under $10$-fold cross-val
 \item all input variables, like we got them: $rsme=641$
 \item all input variables and squares of continuous ones ($\{1, \ldots, 38\}$), $rsme = 546$
 \item only continuous variables and their squares: $rsme = 471$
-\item only continuous variables, their squares and fourth powers: $rsme = 442$
+\item only continuous variables, their squares and fourth powers: $rsme = 469$
 \end{itemize}
 This was not very suprising, as:
 \begin{enumerate}
 \item we had badly conditioned matrix $X$, only because of our discrete variables, which could lead to computational errors when solving normal equations with all variables,
 \item discrete variables were very lightly correlated with output variable, so removing them did not made us lost much of information.
 \end{enumerate}
-In the same time we big variation depending on division of data in cross-validation, that is depending on seed. So we tried to average error over many cross-validations. 
 \end{subsection}
 \begin{subsection}{Gradient descent}
 Running gradient descent for this dataset was problematic. We for step size $\alpha > 0.2$ it did not converge, and at the same time it was taking a lot of time to converge using smaller step sizes. Removing discrete variables again helped, and we managed to make it converge using continuous variables and their squares by making even smaller step size, but results were very similar to those achieved by using normal equations, so we decided to not use gradient descent later.
 
 \end{subsection}
 \begin{subsection}{Rigde regression}
-We tried to fit ridge regression for different values of $\lambda$ and tried various feature transformations. It turned out (fig. \ref{fig:ridge}) that model works best when $\lambda$ is set to zero and features are chosen the same way as with least squares method. Amongst others, we also tried fitting ridge regression to all continuous variables and their polynomials of degree two, but we made our model overfitting, as shown in the figure \ref{fig:ridgeAllPairs}.
+We tried to fit ridge regression for different values of $\lambda$ and tried various feature transformations. It turned out (fig. \ref{fig:ridge}) that model works best when $\lambda$ is set to zero and features are chosen the same way as with least squares method. Amongst others, we also tried fitting ridge regression to all continuous variables and their pairwise multiplication pairs, but we made our model overfitting, as shown in the figure \ref{fig:ridgeAllPairs}.
 \begin{figure}[!h]
 \center
 \subfigure[Errors for ridge regression model with all second order terms. Big difference of train and test error tells us that our model has big variance.]{\includegraphics[width=2.5in]{../figures/ridgeAllPairs-crop.pdf} \label{fig:ridgeAllPairs}}
