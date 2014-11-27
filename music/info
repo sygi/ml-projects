@@ -1,0 +1,2 @@
+Y_test_weak - predict for a person who was before in the database
+Y_test_strong - predict for a new person, for whom we have no previous listen counts
