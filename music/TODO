@@ -1,9 +1,11 @@
 try to fit linear regression / gaussian process, etc
 
 regression:
-- visualize social graph?
-- find the distribution of data and make it more gaussian
+- visualize social graph? - DONE
+- find the distribution of data and make it more gaussian - DONE
 - use (stochastic) pca to reduce dimensionality
 - try to clusterize the songs
 - make a way to not treat 0 as numbers
 - try cummulative classifyier weighted by the social distance to different people
+- try a slope one algorithm (http://en.wikipedia.org/wiki/Slope_One)
+- try a collaborative filtering algorithm from coursera video (how to set number of hidden variables?) (https://class.coursera.org/ml-005/lecture/100 and further)
