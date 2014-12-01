@@ -7,7 +7,7 @@ function [cluster, Null, Small, Rest] = splitClusters(X)
 % of each X column, Null, Small and Rest are X submatrices for different
 % clusters.
 
-split = 51;
+split = 10e10;
 
 artists = sum(X);
 zeroCounts = (artists == 0);

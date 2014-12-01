@@ -36,28 +36,26 @@ TODO: test matrices descriptions.
 We took a look at various distributions of the data and we have found out that:
 \begin{enumerate}[1.]
 \item Most of the artists have only few distinct listeners. (\ref{fig:artistListeners}). First, we have $1262$ artists for which there don't exist even a single listener, so we cannot predict anything reasonable for them. Then, $90.26\%$ of all the artists have at most $5$ different listeners.
-\item Among $4812$ artists, who have more than one listener, there is very big standard deviation of listen counts for different users: \ref{fig:artistListenersStd}. E.g. only $93$ of them have standard deviation of listen counts $<10$, and $1017$ have $\mbox{std} < 100$. From this we expect big errors in prediction as in most cases we will have very little data about given artist and the data we will be very uncertain.
-\end{enumerate}
-
-
-\begin{figure}[!h]
+\begin{figure}[!t]
 \center
 \subfigure[Numbers of artists with various number of listeners. We see that most of the artists have only $1$ or $2$ listeners.]{\includegraphics[width=2.5in]{../figures/artist_listeners_count-crop.pdf} \label{fig:artistListeners}}
 \hfill
 \subfigure[Number of artists for given value of standard deviation of listen counts of users (excluding zero standard deviation)]{\includegraphics[width=2.5in]{../figures/artist_listeners_std-crop.pdf} \label{fig:artistListenersStd}}
-
 \caption{Analysis of listen counts for given artist}
 \end{figure}
+\item Among $4812$ artists, who have more than one listener, there is very big standard deviation of listen counts for different users: \ref{fig:artistListenersStd}. E.g. only $93$ of them have standard deviation of listen counts $<10$, and $1017$ have $\mbox{std} < 100$. From this we expect big errors in prediction as in most cases we will have very little data about given artist and the data we will be very uncertain.
+\item Distribution of all listen counts (for all artists and all users) is not Gaussian: \ref{fig:listenCounts}. It rather resembles $\frac{1}{x}$ or $e^{-x}$. We tried applying various transformations to normalize the data. We decided to use logarithm, which gave us effect shown on \ref{fig:logListenCounts}. Later, we normalized the data.
+%TODO: pisac o tym, ze artysci mieli dziure w sumie odsluchan? brac to pod uwage?
+\end{enumerate}
 
-\begin{figure}[!h]
+
+\begin{figure}[!t]
 \center
-\subfigure[Numbers of artists with various number of listeners. We see that most of the artists have only $1$ or $2$ listeners.]{\includegraphics[width=2.5in]{../figures/listen_counts-crop.pdf} \label{fig:listenCounts}}
+\subfigure[For each (user, artist) listen count value - how many times does it occur in $Y_{train}$ ]{\includegraphics[width=2.5in]{../figures/listen_counts-crop.pdf} \label{fig:listenCounts}}
 \hfill
-\subfigure[Number of artists for given value of standard deviation of listen counts of users (excluding zero standard deviation)]{\includegraphics[width=2.5in]{../figures/log_listen_counts-crop.pdf} \label{fig:logListenCounts}}
+\subfigure[Same histogram as in \ref{fig:listenCounts}, but after taking logarithm of each value]{\includegraphics[width=2.5in]{../figures/log_listen_counts-crop.pdf} \label{fig:logListenCounts}}
 
-\caption{Analysis of listen counts for given artist}
+\caption{Analysis of whole set of listen counts}
 \end{figure}
-
-\section*{Acknowledgments}
 
 \end{document}
