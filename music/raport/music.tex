@@ -17,13 +17,45 @@
 \begin{abstract}
 This report describes our work on second project done for Machine Learning class at EPFL in Fall 2014. We were given...
 \end{abstract}
+\section*{Music recommendation system}
+\subsection*{Problem and dataset descriptions}
+During the project, we were first given a train dataset, which we should analyse and learn our algorithms on, and then, a week before the deadline, we were given a test dataset, for which we should give our predictions. (Following discussions refer to the train dataset). In the dataset, there is information about $A=15082$ artists and $U=1774$ users. Dataset consists of three matrices:
+\begin{itemize}
+    \item $1\times A$ vector of artists' names - we did not use that.
+    \item $U \times A$ matrix of listen count of each artist by every user. This matrix is called $Y_{train}$.
+    \item $U \times U$ matrix of social network between users. This matrix is caled $G_{train}$.
+\end{itemize}
+
+Both $Y_{train}$ and $G_{train}$ are sparse. Social matrix includes $22904$ ones, which denoted the social connection between users. This mean that our users have on average $12.9109$ friends. $G_{train}$ is symmetric.
+
+In case of listen counts, zero in the matrix meant that the user did not heard of given artist and didn't listen to him, but not necessarily didn't like him. There is $69617$ non-zero entries in the matrix, which constitute $0.26\%$ of it. (Our problem is to predict the listen counts of particular artist for some users).
+
+TODO: test matrices descriptions.
+
+\subsection*{Data analysis and preparation}
+We took a look at various distributions of the data and we have found out that:
+\begin{enumerate}[1.]
+\item Most of the artists have only few distinct listeners. (\ref{fig:artistListeners}). First, we have $1262$ artists for which there don't exist even a single listener, so we cannot predict anything reasonable for them. Then, $90.26\%$ of all the artists have at most $5$ different listeners.
+\item Among $4812$ artists, who have more than one listener, there is very big standard deviation of listen counts for different users: \ref{fig:artistListenersStd}. E.g. only $93$ of them have standard deviation of listen counts $<10$, and $1017$ have $\mbox{std} < 100$. From this we expect big errors in prediction as in most cases we will have very little data about given artist and the data we will be very uncertain.
+\end{enumerate}
+
 
 \begin{figure}[!h]
 \center
-%\subfigure[Boxplot of original input data $\mathbf{X}$. Data is not centered and therefore we normalize it.]{\includegraphics[width=2.5in]{../figures/classif/boxplot_before-crop.pdf} \label{fig:boxplotBefore}}
+\subfigure[Numbers of artists with various number of listeners. We see that most of the artists have only $1$ or $2$ listeners.]{\includegraphics[width=2.5in]{../figures/artist_listeners_count-crop.pdf} \label{fig:artistListeners}}
 \hfill
-%\subfigure[Boxplot of input data after normalization and removing outliers.]{\includegraphics[width=2.5in]{../figures/classif/boxplot_after-crop.pdf} \label{fig:boxplotAfter}}
-\caption{asdfasdf}
+\subfigure[Number of artists for given value of standard deviation of listen counts of users (excluding zero standard deviation)]{\includegraphics[width=2.5in]{../figures/artist_listeners_std-crop.pdf} \label{fig:artistListenersStd}}
+
+\caption{Analysis of listen counts for given artist}
+\end{figure}
+
+\begin{figure}[!h]
+\center
+\subfigure[Numbers of artists with various number of listeners. We see that most of the artists have only $1$ or $2$ listeners.]{\includegraphics[width=2.5in]{../figures/listen_counts-crop.pdf} \label{fig:listenCounts}}
+\hfill
+\subfigure[Number of artists for given value of standard deviation of listen counts of users (excluding zero standard deviation)]{\includegraphics[width=2.5in]{../figures/log_listen_counts-crop.pdf} \label{fig:logListenCounts}}
+
+\caption{Analysis of listen counts for given artist}
 \end{figure}
 
 \section*{Acknowledgments}
