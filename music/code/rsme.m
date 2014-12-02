@@ -9,4 +9,3 @@ end
 error = error / length(idx);
 error = sqrt(error);
 end
-

@@ -3,7 +3,8 @@ try to fit linear regression / gaussian process, etc
 regression:
 - visualize social graph? - DONE
 - find the distribution of data and make it more gaussian - known
-- see the variance of user counts on different artists
+- see the variance of user counts on different artists - DONE
+- run multiple CV to observe variance of (estimated test) error. Save results to some file to be able to draw a boxplot at the end.
 - use (stochastic) pca to reduce dimensionality
 - try to clusterize the songs
 - try something weighted by the social distance to different people

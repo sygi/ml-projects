@@ -5,14 +5,13 @@ hist(data(data < 10^3), 100);
 one = xlabel('listen count value');b
 two = ylabel('number of entries in $Y_{train}$');
 preparePlot([one two]);
-print -dpdf ../figures/listen_counts.pdf
 
 logArtists = log(data);
 hist(logArtists, 100);
 one = xlabel('logarithm of listen count value');
 two = ylabel('number of entries in $Y_{train}$');
 preparePlot([one two]);
-print -dpdf ../figures/log_listen_counts.pdf
+
 % 
 % sqrtArtists = sqrt(artists);
 % subplot(2,2,3);

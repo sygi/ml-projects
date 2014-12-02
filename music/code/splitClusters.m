@@ -1,8 +1,8 @@
 function [cluster, Null, Small, Rest] = splitClusters(X)
 % split (user, artist) matrix into 3 clusters (by columns):
 % 1. artists with 0 listen counts
-% 2. artists with < 51 listen counts
-% 3. artists with >= 51 listen counts
+% 2. artists with < split listen counts
+% 3. artists with >= split listen counts
 % cluster is length(artists) a row vector having number of cluster
 % of each X column, Null, Small and Rest are X submatrices for different
 % clusters.
