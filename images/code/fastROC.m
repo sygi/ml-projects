@@ -68,10 +68,26 @@ end
 auc = sum(tpr.*[(diff(fp)==1); zeros(1,m)])./num_neg;
 
 % average TPR between 10^-3 and 10^-2
-logFPR = log10(fpr + eps/100);
-intervalIdxs = find( (logFPR >= log10(10^-3)) & (logFPR <= log10(10^-2)));
+startAvg = 10^-3;
+endAvg = 10^-2;
 
-tprAtWP = trapz( logFPR(intervalIdxs), tpr(intervalIdxs) ) ;
+logFPR = log10(fpr + eps/100);
+intervalIdxs = find( (logFPR > log10(startAvg)) & (logFPR < log10(endAvg)));
+
+logVals = logFPR(intervalIdxs);
+
+% fix for some pathological cases
+if intervalIdxs(1) >= 2
+    intervalIdxs = [intervalIdxs(1)-1; intervalIdxs];
+    logVals = [log10(startAvg); logVals];
+end
+
+if intervalIdxs(end) < length(logFPR)
+    intervalIdxs = [intervalIdxs; intervalIdxs(end)+1];
+    logVals = [logVals; log10(endAvg)];
+end
+
+tprAtWP = trapz(logVals , tpr(intervalIdxs) ) ;
 if plot_flag==1
     %title(sprintf('TPR @ Working Point = %.2f', tprAtWP));
 end

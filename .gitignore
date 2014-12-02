@@ -4,6 +4,5 @@
 *.aux
 *.log
 *.out
-code/logisticRegressionM.m
-code/testM.m
 octave-workspace
+images/data/*.mat
