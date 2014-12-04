@@ -8,4 +8,3 @@ function [error, prediction] = estimateMeanPrediction(train, test)
     end
     error = rsme(test, prediction);
 end
-
