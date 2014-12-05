@@ -10,14 +10,14 @@ if ~exist('maxIter', 'var')
 end
 
 if ~exist('lambda', 'var')
-    lambda = 0.01;
+    lambda = 10;
 end
 
 [usr,art] = size(X);
 A = rand(noHidden,art);
-% A(1, :) = sum(X) ./ max(1,sum(sign(X)));
+%A(1, :) = sum(X) ./ max(1,sum(X ~= 0));
 U = rand(noHidden,usr);
-% U(1, :) = sum(X,2) ./ max(1,sum(sign(X), 2));
+%U(1, :) = sum(X,2) ./ max(1,sum(X ~= 0, 2));
 err = zeros(1,maxIter);
 
 for i=1:maxIter
@@ -32,7 +32,7 @@ for i=1:maxIter
    if (mod(i, 10) > 1 && mod(i, 10) < 4)
       err(i) = alsError(A, U, X, lambda);
       err(i)
-      if abs(err(i-1)-err(i)) < 1e-6;
+      if (i > 1 && abs(err(i-1)-err(i)) < 1e-6)
           fprintf('converged');
           break;
       end

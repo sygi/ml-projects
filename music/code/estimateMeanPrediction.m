@@ -6,5 +6,5 @@ function [error, prediction] = estimateMeanPrediction(train, test, unnormalize)
     for i=1:length(i1)
         prediction(i1(i), j2(i)) = artists(j2(i));
     end
-    error = rsme(test, prediction, unnormalize);
+    error = rsme(prediction, test, unnormalize);
 end
