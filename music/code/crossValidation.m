@@ -1,15 +1,19 @@
 function [error, real,trainErr] = crossValidation(train, social, normalize)
 % running cross validation on some given algorithm
 % only weak test for now
-if (exist('normalize', 'var') && normalize)
+if ~exist('normalize', 'var')
+    normalize = false;
+end
+if (normalize)
     train = transformData(train);
 end
+
 p = randperm(100);
 p = p(1:10);
 real = zeros(length(p), 1);
 for current=1:length(p)
     setSeed(p(current));
-    K = current + 1;
+    K = current + 3;
     [D N] = size(train);
     entries = length(find(train));
     perm = randperm(entries);
@@ -28,7 +32,7 @@ for current=1:length(p)
         %err(i) = p(current) * estimateNeighbourMean(train_new, social, test_new) ...
         %    + (1-p(current)) * estimateMeanPrediction(train_new, test_new);
         %err(i) = estimateSlopeOne(train_new, test_new)
-        [err(i),trainErr(i)] = estimateALS(train_new,test_new,10);
+        err(i) = estimateALS(train_new,test_new,3, normalize)
         perm = circshift(perm, [0, Nk]);
     end
     real(current) = mean(err)

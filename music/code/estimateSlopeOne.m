@@ -1,6 +1,5 @@
 function [error, prediction] = estimateSlopeOne(train, test)
 %http://en.wikipedia.org/wiki/Slope_One
-average = sum(train) ./ max(1, sum(sign(train))); % TODO: without user
 prediction = sparse([], [], [], size(train,1), size(train, 2));
 [usrs, arts] = find(test);
 [ratingDiffr counts] = averageDifferenceOfArtistListenCounts(train);
@@ -11,11 +10,15 @@ for i=1:length(usrs)
     listened = find(train(usrs(i), :));
     for a=1:length(listened)
         mySum = mySum + counts(arts(i), listened(a));
-        estimated = estimated + ratingDiffr(arts(i), listened(a)) + train(usrs(i), arts(i)) * counts(arts(i), listened(a));
+        estimated = estimated + ratingDiffr(arts(i), listened(a)) + train(usrs(i), listened(a)) * counts(arts(i), listened(a));
     end
-    prediction(usrs(i), arts(i)) = estimated / mySum;
+    if (mySum ~= 0)
+        prediction(usrs(i), arts(i)) = estimated / mySum;
+    else
+        prediction(usrs(i), arts(i)) = 1;
+    end
 end
-error = rsme(test, prediction);
+error = rsme(test, prediction, true);
 
 end
 

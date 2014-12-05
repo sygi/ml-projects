@@ -2,8 +2,8 @@ function error = rsme(predicted, real, unnormalize)
 %RSME error between predicted matrix and real test one
 
 if (exist('unnormalize', 'var') && unnormalize)
-    predicted = unTransformData(predicted);
-    real = unTransformData(real);
+    predicted = unTransformData(predicted, find(real));
+    real = unTransformData(real, find(real));
 end
 
 idx = find(real);

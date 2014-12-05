@@ -5,7 +5,6 @@ function [A,U] = alsUpdate(A0,U0,Ytrain,lambda)
    U = U0;
    A = A0;
    
-   
    for i=1:Mu 
       v0 = Ytrain(i,:);
       Ac = A(:,(v0>0));

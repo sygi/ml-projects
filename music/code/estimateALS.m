@@ -1,15 +1,15 @@
-function [TestErr,TrainErr] = estimateALS(Ytrain,Ytest,noHidden,lambda, maxIter)
+function [TestErr,TrainErr] = estimateALS(Ytrain,Ytest,noHidden, unnormalize, lambda, maxIter)
 
     if ~exist('maxIter', 'var')
-        maxIter = 100;
+        maxIter = 20;
     end
     
     if ~exist('lambda', 'var')
-        lambda = 0.000001;
+        lambda = 0.0001;
     end
     
     [A,U,TrainErr] = ALS(Ytrain,noHidden,lambda,maxIter);
-%     TestErr = alsError(A,U,Ytest,lambda);
-    TestErr = rsme(U'*A, Ytest,true);
+    % TestErr = alsError(A,U,Ytest);
+    TestErr = rsme(U'*A, Ytest, unnormalize);
     
 end
