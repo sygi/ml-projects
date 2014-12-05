@@ -5,10 +5,11 @@ function [TestErr,TrainErr] = estimateALS(Ytrain,Ytest,noHidden,lambda, maxIter)
     end
     
     if ~exist('lambda', 'var')
-        lambda = 1;
+        lambda = 0.000001;
     end
     
     [A,U,TrainErr] = ALS(Ytrain,noHidden,lambda,maxIter);
-    TestErr = alsError(A,U,Ytest);
+    % TestErr = alsError(A,U,Ytest);
+    TestErr = rsme(U'*A, Ytest);
     
 end

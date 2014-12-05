@@ -2,7 +2,7 @@ data = Ytrain;
 data = data(find(data));
 
 hist(data(data < 10^3), 100);
-one = xlabel('listen count value');b
+one = xlabel('listen count value');
 two = ylabel('number of entries in $Y_{train}$');
 preparePlot([one two]);
 
