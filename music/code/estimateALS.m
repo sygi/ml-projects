@@ -9,7 +9,7 @@ function [TestErr,TrainErr] = estimateALS(Ytrain,Ytest,noHidden,lambda, maxIter)
     end
     
     [A,U,TrainErr] = ALS(Ytrain,noHidden,lambda,maxIter);
-    % TestErr = alsError(A,U,Ytest);
-    TestErr = rsme(U'*A, Ytest);
+%     TestErr = alsError(A,U,Ytest,lambda);
+    TestErr = rsme(U'*A, Ytest,true);
     
 end

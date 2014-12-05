@@ -28,7 +28,7 @@ for i=1:maxIter
 %    end
    %err(i) = alsError(A, U, X);
    if (mod(i, 50) > 1 && mod(i, 50) < 5)
-      err(i) = alsError(A, U, X);
+      err(i) = alsError(A, U, X,lambda);
       err(i)
       if abs(err(i-1)-err(i)) < 1e-4;
           fprintf('converged');
