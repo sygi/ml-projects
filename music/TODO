@@ -5,10 +5,13 @@ regression:
 - find the distribution of data and make it more gaussian - known
 - see the variance of user counts on different artists - DONE
 - run multiple CV to observe variance of (estimated test) error. Save results to some file to be able to draw a boxplot at the end.
-- use (stochastic) methods to reduce dimensionality
-- try to clusterize the songs
+- use (stochastic) methods to reduce dimensionality ???
+- try to clusterize the artists
 - try something weighted by the social distance to different people
 - try kNN
-- try a slope one algorithm (http://en.wikipedia.org/wiki/Slope_One)
-- try a collaborative filtering algorithm from coursera video (how to set number of hidden variables?) (https://class.coursera.org/ml-005/lecture/100 and further)
-- try to combine 2 types of information: user 'local' data and social information
+- try a slope one algorithm (http://en.wikipedia.org/wiki/Slope_One) DONE :/
+- try a collaborative filtering algorithm from coursera video (how to set number of hidden variables?) (https://class.coursera.org/ml-005/lecture/100 and further) PROBABLY DONE
+- try to combine 2 types of information: user 'local' data and social information 
+- Kmeans (code DONE, but can't use it)
+- divide by the biggest listening count
+- read paper 
