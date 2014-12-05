@@ -10,7 +10,8 @@ function [A,U] = alsUpdate(A0,U0,Ytrain,lambda)
       idx = (v0 ~= 0);
       Ac = A(:,idx);
       v0 = v0(idx);
-      v1 = (Ac*Ac'+eye(Mf)*lambda)\(Ac*v0');
+      na = sum(A(:,id2(i)) ~= 0); %na - numner of artist for this user
+      v1 = (Ac*Ac'+eye(Mf)*lambda*na)\(Ac*v0');
       U(:,i)=v1;
    end
    
@@ -19,7 +20,8 @@ function [A,U] = alsUpdate(A0,U0,Ytrain,lambda)
       idx = (v0 ~= 0);
       Uc = U(:,idx);
       v0 = v0(idx);
-      v1 = (Uc*Uc'+eye(Mf)*lambda)\(Uc*v0);
+      nu = sum(U(:,id1(i)) ~= 0); %nu - number of users for this artist
+      v1 = (Uc*Uc'+eye(Mf)*lambda*nu)\(Uc*v0);
       A(:,i)=v1;
    end
 end
