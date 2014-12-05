@@ -1,4 +1,4 @@
-function [error, real] = crossValidation(train, social, normalize)
+function [error, real,trainErr] = crossValidation(train, social, normalize)
 % running cross validation on some given algorithm
 % only weak test for now
 if (exist('normalize', 'var') && normalize)
@@ -16,6 +16,7 @@ for current=1:length(p)
     idx = find(train);
     Nk = floor(entries / K);
     err = zeros(1, K);
+    trainErr = zeros(1,K);
     fprintf('starting %d fold\n', K);
     for i = 1:K
         test_new = sparse([], [], [], D, N);
@@ -26,7 +27,8 @@ for current=1:length(p)
         % err(i) = estimateMeanPrediction(train_new, test_new);
         %err(i) = p(current) * estimateNeighbourMean(train_new, social, test_new) ...
         %    + (1-p(current)) * estimateMeanPrediction(train_new, test_new);
-        err(i) = estimateSlopeOne(train_new, test_new)
+        %err(i) = estimateSlopeOne(train_new, test_new)
+        [err(i),trainErr(i)] = estimateALS(train_new,test_new,10);
         perm = circshift(perm, [0, Nk]);
     end
     real(current) = mean(err)
