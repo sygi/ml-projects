@@ -1,28 +1,31 @@
 function error = rsme(predicted, real, unnormalize)
 %RSME error between predicted matrix and real test one
-
+%global maxListen;
 if (exist('unnormalize', 'var') && unnormalize)
+    fprintf('unNormalizing\n');
     predicted = unTransformData(predicted, find(real));
     real = unTransformData(real, find(real));
 end
 
+assert(all(size(real) == size(predicted)));
 idx = find(real);
+[usr, art] = find(real);
 error = 0;
 wrong = 0;
 for i=1:length(idx)
     if (predicted(idx(i)) == 0)
         wrong = wrong + 1;
     end
-%    assert(predicted(idx(i)) ~= 0);
-    if (predicted(idx(i)) - real(idx(i)) > 1e5)
+    assert(predicted(idx(i)) >= 0);
+    if (abs(predicted(idx(i)) - real(idx(i))) > 1e4)
         r = full(real(idx(i)));
         p = full(predicted(idx(i)));
         id = full(idx(i));
-        fprintf('real %f predicted %f in place %d\n', r, p, id);
+        fprintf('err %f real %f predicted %f in place (%d, %d)\n', (r-p)^2, r, p, full(usr(i)), full(art(i)));
     end
     error = error + (predicted(idx(i)) - real(idx(i)))^2;
 end
 error = error / length(idx);
 error = sqrt(error);
-wrong
+wrong;
 end
