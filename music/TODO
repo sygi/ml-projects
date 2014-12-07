@@ -15,3 +15,4 @@ regression:
 - Kmeans (code DONE, but can't use it)
 - divide by the biggest listening count
 - read paper 
+- check if gaussian is data (T-distribution?)
