@@ -7,8 +7,10 @@ for i=1:length(labels)
 end
 
 c = corr(labels,X);
-l2 = labels(1:1000);
-X2 = X(1:1000,abs(c)>0.25);
+
+labels = (labels + 1)/2;
+l2 = labels(1:2000);
+X2 = X(1:2000,abs(c)>0.25);
 size(X2)
 
 ThisStupidError = crossValidationM(l2,X2,2,10,1,1);
