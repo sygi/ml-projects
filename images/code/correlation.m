@@ -6,9 +6,7 @@ for i=1:length(labels)
     X(i,:) = feats{i}(:);  % convert to a vector of D dimensions
 end
 
-break;
-
-c = corr(labels,X); 
+c = corr(labels,X);
 c = reshape(c,26,10,36);
 
 figure;
