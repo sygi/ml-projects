@@ -8,6 +8,6 @@ function [error, prediction] = estimateNeighbourMean(train, Gtrain, test)
         values = train(nei, arts(i));
         prediction(usrs(i), arts(i)) = sum(values) ./ max(1, sum(sign(values)));
     end
-    error = rsme(test, prediction);
+    error = logError(test, prediction, false);
 end
 

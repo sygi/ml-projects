@@ -47,8 +47,6 @@ We took a look at various distributions of the data and we have found out that:
 \item Distribution of all listen counts (for all artists and all users) is not Gaussian: \ref{fig:listenCounts}. It rather resembles $\frac{1}{x}$ or $e^{-x}$. We tried applying various transformations to normalize the data. We decided to use logarithm, which gave us effect shown on \ref{fig:logListenCounts}. Later, we normalized the data.
 %TODO: pisac o tym, ze artysci mieli dziure w sumie odsluchan? brac to pod uwage?
 \end{enumerate}
-
-
 \begin{figure}[!t]
 \center
 \subfigure[For each (user, artist) listen count value - how many times does it occur in $Y_{train}$ ]{\includegraphics[width=2.5in]{../figures/listen_counts-crop.pdf} \label{fig:listenCounts}}
@@ -57,5 +55,23 @@ We took a look at various distributions of the data and we have found out that:
 
 \caption{Analysis of whole set of listen counts}
 \end{figure}
+\subsection*{Artist-mean prediction}
+First, very simple model we trained, was to predict for each (user, artist) the average listen count of the artist. %TODO: explain cross-validation
+ We run it using $k$-fold cross-validation, for $k\in\{2,\ldots, 10\}$, each for $10$ different seeds. We achieved RSME error around $4000$, as shown in the figure: \ref{fig:mean}. This value let us later measure performance of other models. 
+ 
+ We also made a plot to find out for which artists we get the biggest errors: \ref{fig:artistSumError}. It turned out, that errors achieved for artists with at least $10^5$ summaric listen counts (there is only $83 = 0.55\%$ of them), are an order of magnitude bigger than for less commonly listened artists. It is not surprising, as they have bigger variance, but this made as think to put more effort into predicting those "big values". 
+\begin{figure}[!t]
+\center
+\subfigure[Error distribution for different folds.]{\includegraphics[width=2.5in]{../figures/mean-k-fold-crop.pdf} \label{fig:mean}}
+\hfill
+\subfigure[Errors all (users, artist) pairs. Point $(x,y)$ in the plot denotes that for some user we got error $y$ and the sum of corresponding artist's listen counts is $y$.]{\includegraphics[width=2.5in]{../figures/artist-error-crop.pdf} \label{fig:artistSumError}}
+\caption{Results of artist mean prediction}
+\end{figure}
 
+Based on this result, as well as the distribution of sums of artist count shown on figure \ref{fig:artistsDist}, we decided to split the dataset into three parts, containing artists which summaric listen counts fit into the intervals:  $[0, 49], [50, 10^5-1], [10^5, \infty)$.
+\begin{figure}[!t]
+\center
+\includegraphics[width=3in]{../figures/artists-distribution-crop.pdf} \label{fig:artistDist}
+\caption{Sum of artist count distribution}
+\end{figure}
 \end{document}
