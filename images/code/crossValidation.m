@@ -1,4 +1,4 @@
-function [prediction,y_test] = crossValidation(y,X,k,parameter,...
+function [prediction,y] = crossValidation(y,X,k,parameter,...
                                                 treshold,seed,normalized)
 %       generic cross-validation 
 %
@@ -26,7 +26,9 @@ Nk = floor(N/k);
 idx = randperm(Nk*k)';
 y = y(1:Nk*k);
 X = X(1:Nk*k,:);
-pred = zeros(Nk,k);
+% pred = zeros(Nk,k);
+prediction = zeros(Nk*k,1);
+fprintf('stating %d-fold cross-validation\n',k);
 
     for i = 1:k
         y_test = y(idx(1:Nk));
@@ -42,9 +44,10 @@ pred = zeros(Nk,k);
         X_train = X_train(:,c>treshold);
         X_test = X_test(:,c>treshold);
         %estimating the probabilities
-        pred(:,i)=estimateSVM(X_train,y_train,X_test,parameter);
-        %pred(:,i)=estimateLogisticReg(X_train,y_train,X_test,parameter);
+        prediction(idx(1:Nk))=estimateSVM(X_train,y_train,X_test,parameter);
+        %prediction(idx(1:Nk))=estimateLogisticReg(X_train,y_train,X_test,parameter);
         %here add other estimate something
+        %prediction(idx(1:Nk))=y_test;
+        idx = circshift(idx,[Nk, 0]);
     end
-    prediction=mean(pred,2);
 end

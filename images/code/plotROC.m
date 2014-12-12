@@ -1,17 +1,15 @@
 
 
-%linear (best)
-%[p,y] = crossValidation(labels(1:3000),X(1:3000,:),4,0.9,0.2);
 
-% SVM linear make sense, quadratic make more sense, mlp make less :P
-%rbf also don't make much sense
-% [p,y] = crossValidation(labels(1:3000),X(1:3000,:),4,'linear',0.2);
-% [p2,y] = crossValidation(labels(1:3000),X(1:3000,:),4,'quadratic',0.2);
-% [p3,y] = crossValidation(labels(1:3000),X(1:3000,:),4,'mlp',0.2);
-% [p4,y] = crossValidation(labels(1:3000),X(1:3000,:),4,'rbf',0.2);
-
+permutacja = randperm(length(labels));
+permutacja = permutacja(1:1000);
+%pen. logistic regression (best) 0.7
+%[plinear,y] = crossValidation(labels(permutacja),X(permutacja,:),4,0.8,0.1);
+%linear SVM - sth about 0.8
+%[p1,y] = crossValidation(labels(permutacja),X(permutacja,:),4,'linear');
+[p2,y] = crossValidation(labels(permutacja),X(permutacja,:),4,'gaussian');
 
 
-randPred = rand(size(p));
-methodNames = {'linear SVM','quandratic SVM', 'mlp SVM','rbf SVM','Random'}; % this is to show it in the legend
-avgTPRList = evaluateMultipleMethods( y, [p,p2,p3,p4,randPred], true, methodNames );
+randPred = rand(size(y));
+methodNames = {'linear','gausian','random'}; % this is to show it in the legend
+avgTPRList = evaluateMultipleMethods(y, [p1,p2,randPred], true, methodNames );

@@ -9,12 +9,12 @@ end
 [N,D]=size(tX);
 beta = zeros(D,1);
 for i = 1:maxIter
-    gradient = (-tX'*(y - sigmoid(tX*beta))+lambda*beta)/N;
+    gradient = (-tX'*(y - sigmoid(tX*beta))+lambda*beta);
     if norm(gradient) < 1e-6
         fprintf('finished early\n');
         return;
     end
-    H = computeHessian(tX,beta)+eye(length(beta))*lambda/length(y);
+    H = computeHessian(tX,beta)+eye(length(beta))*lambda;
     tmp = H\gradient;
     beta = beta-alpha*tmp;
 end
