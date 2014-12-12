@@ -1,8 +1,12 @@
-function [error, prediction] = estimateSlopeOne(train, test)
+function [error, prediction] = estimateSlopeOne(train, test, normalize)
 %http://en.wikipedia.org/wiki/Slope_One
+if (normalize)
+    train = transformData(train);
+    test = transformTestData(test);
+end
 prediction = sparse([], [], [], size(train,1), size(train, 2));
 [usrs, arts] = find(test);
-[ratingDiffr counts] = averageDifferenceOfArtistListenCounts(train);
+[ratingDiffr, counts] = averageDifferenceOfArtistListenCounts(train);
 fprintf('Calculated difference of ratings\n');
 for i=1:length(usrs)
     mySum = 0;
@@ -17,8 +21,18 @@ for i=1:length(usrs)
     else
         prediction(usrs(i), arts(i)) = 1;
     end
+         prediction(usrs(i), arts(i)) = min(prediction(usrs(i),arts(i)), max(max(train(usrs(i), :)), max(train(:, arts(i)))));
+         mins = min( ...
+             min(train(usrs(i), (train(usrs(i), :) ~= 0))), ...
+             min(train(train(:, arts(i)) ~= 0, arts(i))));
+         if min(size(mins)) > 0
+         prediction(usrs(i), arts(i)) = max(prediction(usrs(i), arts(i)), min( ...
+             min(train(usrs(i), (train(usrs(i), :) ~= 0))), ...
+             min(train(train(:, arts(i)) ~= 0, arts(i)))));
+         end
+        % prediction(usrs(i), arts(i)) = max(prediction(usrs(i), arts(i)), 0);
+        % assert(predicted(usr(i), art(i)) >= 0);
 end
-error = rsme(test, prediction, true);
-
+error = logError(prediction, test, normalize);
 end
 

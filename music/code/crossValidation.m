@@ -1,39 +1,23 @@
-function [error, real,trainErr] = crossValidation(train, social, normalize)
+function [real,trainErr] = crossValidation(train, social, normalize)
 % running cross validation on some given algorithm
 % only weak test for now
 if ~exist('normalize', 'var')
     normalize = false;
 end
-train = train(:, sum(train) ~= 0);
-train = train(sum(train,2) ~= 0, :);
-%maxListen = max(train, [], 2);
-%for u=1:size(train,1)
-%    train(u, :) = train(u, :) ./ maxListen(u);
-%end
-    
-if (normalize)
-    train = transformData(train);
-end
-
-% for u=1:size(train,1)
-%     listenSums(u)=max(1,sum(train(u,:)));
-%     train(u,:) = train(u,:) ./ max(1,sum(train(u,:)));
-% end
 p = randperm(100);
 p = p(1:3);
 hidden = [1]; %linspace(5, 100, 10);
 lds = [0.001];
 if (~normalize)
-    lds = lds .* 2000;
+    lds = lds .* 400000;
 end
-real = zeros(length(lds), 1);
+seeds = 11:12;
+real = zeros(2,1);
 K = 5;
-for mySeed=1:2
+for mySeed=1:length(seeds);
 fprintf('new seed\n');
-setSeed(floor(mySeed*3 + 14));
-for current=1:length(lds)
-    fprintf('starting lambda %f\n', lds(current));
-    %K = current + 3;
+setSeed(floor(mySeed*7 + 4));
+for current=1:1
     [D N] = size(train);
     entries = length(find(train));
     perm = randperm(entries);
@@ -48,15 +32,24 @@ for current=1:length(lds)
         train_new = train;
         train_new(idx(perm(1:Nk))) = 0;
         % run some classifier
-        % err(i) = estimateMeanPrediction(train_new, test_new, normalize);
+        
+        
+        err(i) = estimateMeanPrediction(train_new, test_new, normalize);
+        mp(i) = err(i)
         %err(i) = p(current) * estimateNeighbourMean(train_new, social, test_new) ...
         %    + (1-p(current)) * estimateMeanPrediction(train_new, test_new);
-        %err(i) = estimateSlopeOne(train_new, test_new)
-        err(i) = estimateALS(train_new,test_new, 15, normalize, lds(current));
+        err(i) = estimateSlopeOne(train_new, test_new, normalize);
+        sp(i) = err(i)
+        err(i) = estimateALS(train_new,test_new, 70, normalize, lds(current));
+        al(i) = err(i)
+        err(i) = estimateKNN(train_new, test_new, normalize, 10, lds(current), 50);
+        kn(i) = err(i)
+        % err(i) = estimateCombiningAlgorithms(train_new, test_new, 50, 1e5, normalize);
+        fprintf('Mean Prediction: %f\nSlope one: %f\nAls: %f\nKNN prediction: %f\n', mp(i), sp(i), al(i), kn(i));
         fprintf('error %f for lambda = %f\n', err(i), lds(current));
         perm = circshift(perm, [0, Nk]);
     end
-    real(current) = real(current) + mean(err);
+    fprintf('Mean Prediction: %f\nSlope one: %f\nAls: %f\nKNN prediction: %f\n', mean(mp), mean(sp), mean(al), mean(kn));
+    real(mySeed) = mean(err)
 end
 end
-real = (real ./ 2)

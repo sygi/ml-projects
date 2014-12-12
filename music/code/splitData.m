@@ -23,13 +23,13 @@ Gstrong = Gtrain(idxTe, [idxTr idxTe]);
 % Test data for weak generalization
 % Keep 10 entries per existing user as test data
 [D N] = size(Ytrain_new);
-numD = 10; % number of artists held out per user
+numD = 5; % number of artists held out per user
 dd = [];
 nn = [];
 yy = [];
 for n = 1:N
     On = find(Ytrain_new(:,n)~=0);
-    if length(On)>2
+    if length(On)>10
         ind = unidrnd(length(On),numD,1); % choose some for testing
         d = On(ind);
         dd = [dd; d];
