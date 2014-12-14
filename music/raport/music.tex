@@ -11,6 +11,10 @@
 \usepackage{amsopn}
 \title{Project-II by group TORONTO}
 \author{Michalina Pacholska \And Jakub Sygnowski}
+\addtolength{\voffset}{-1.25cm}
+\addtolength{\textheight}{+1.5cm}
+\addtolength{\hoffset}{-2.5cm}
+\addtolength{\textwidth}{+5cm}
 \nipsfinalcopy
 \newcommand{\mychapter}[2]{
     \setcounter{chapter}{#1}
@@ -57,7 +61,6 @@ We took a look at various distributions of the data and we have found out that:
 \begin{figure}[!h]
 \center
 \subfigure[For each (user, artist) listen count value - how many times does it occur in $Y_{train}$ ]{\includegraphics[width=2.5in]{../figures/listen_counts-crop.pdf} \label{fig:listenCounts}}
-\hfill
 \subfigure[Same histogram as in \ref{fig:listenCounts}, but after taking logarithm of each value]{\includegraphics[width=2.5in]{../figures/log_listen_counts-crop.pdf} \label{fig:logListenCounts}}
 
 \caption{Analysis of whole set of listen counts}
@@ -106,7 +109,6 @@ After setting the number of hidden variables to $42$ we got an $MSE=0.8324$. We 
 \begin{figure}[!h]
 \center
 \subfigure[Cross-validation error for different number of hidden variables using ALS.]{\includegraphics[width=2.5in]{../figures/als-hidden-error-crop.pdf} \label{fig:alsHidden}}
-\hfill
 \subfigure[Error distribution in predicting listen counts of different artists.]{\includegraphics[width=2.5in]{../figures/als-error-dist-crop.pdf} \label{fig:alsErrorDist}}
 \caption{Analysis of ALS method.}
 \end{figure}
@@ -116,36 +118,20 @@ When we have computed $A$ and $U$ matrix factors of non-zero elements of $Ytrain
 \begin{enumerate}
 \item calculate $A$, $U$ - features of artists and users - using ALS
 \item for each (user, artist) pair to predict, take a look at features of every other artist this user listened and every other user that listened to this artist
-\item choose $K$ of those, which are nearest (in euclidean distance sense) to the artist row in $A$ or, respectively, user row in $U$
+\item choose $K$ of those, which are nearest (in $l_1$ norm (we also tried $l_2$))) to the artist row in $A$ or, respectively, user row in $U$
 \item return mean of the $K$ listen counts, which corresponds to those $K$ vectors
 \end{enumerate}
 
-
-%TODO: try different distances
+To choose value of $K$ we ran cross-validation. As the training was taking some time, we decided to choose it based on results on a subset of $Ytrain$. We chose randomly $100$ users and $4000$ artists and observed lowest test error for $K=8$. After choosing the parameters we ran it on the whole matrix and received test error $MSE=0.4180$.
+\begin{figure}[!h]
+\center
+\subfigure[Cross-validation error for different number of neighbours in KNN.]{\includegraphics[width=2.5in]{../figures/knn-error-crop.pdf} \label{fig:knn}}
+\subfigure[Error distribution in predicting listen counts of different artists.]{\includegraphics[width=2.5in]{../figures/knn-err-dist-crop.pdf} \label{fig:knnErrorDist}}
+\caption{Analysis of KNN method.}
+\end{figure}
 \section{User-mean prediction}
+After trying all those methods we came back to the mean prediction and tried to run it on transposed matrix (it corresponds to predicting the mean of each user listen counts). It turned out that this method works better than any previous one, giving $MSE=0.3673$. It actually makes sense, considering figure \ref{fig:artistListeners} - there is very little data for most of the artists, and we have this data about the users. This also explains why KNN works best among other methods - it takes into account user data more than other methods. We used this very simple method to give predictions for our weak dataset.
 
-\iffalse
-\section{Artist-mean prediction}
-First, very simple model we trained, was to predict for each (user, artist) the average listen count of the artist. %TODO: explain cross-validation
- We run it using $k$-fold cross-validation, for $k\in\{2,\ldots, 10\}$, each for $10$ different seeds. We achieved RSME error around $4000$, as shown in the figure: \ref{fig:mean}. This value let us later measure performance of other models. 
- 
- We also made a plot to find out for which artists we get the biggest errors: \ref{fig:artistSumError}. It turned out, that errors achieved for artists with at least $10^5$ summaric listen counts (there is only $83 = 0.55\%$ of them), are an order of magnitude bigger than for less commonly listened artists. It is not surprising, as they have bigger variance, but this made as think to put more effort into predicting those "big values". 
-\begin{figure}[!t]
-\center
-\subfigure[Error distribution for different folds.]{\includegraphics[width=2.5in]{../figures/mean-k-fold-crop.pdf} \label{fig:mean}}
-\hfill
-\subfigure[Errors all (users, artist) pairs. Point $(x,y)$ in the plot denotes that for some user we got error $y$ and the sum of corresponding artist's listen counts is $y$.]{\includegraphics[width=2.5in]{../figures/artist-error-crop.pdf} \label{fig:artistSumError}}
-\caption{Results of artist mean prediction}
-\end{figure}
-
-Based on this result, as well as the distribution of sums of artist count shown on figure \ref{fig:artistsDist}, we decided to split the dataset into three parts, containing artists which summaric listen counts fit into the intervals:  $[0, 49], [50, 10^5-1], [10^5, \infty)$.
-\begin{figure}[!t]
-\center
-
-\includegraphics[width=3in]{../figures/artists-distribution-crop.pdf} \label{fig:artistsDist}
-\caption{Sum of artist count distribution}
-\end{figure}
-\fi
 \begingroup
 \renewcommand{\cleardoublepage}{}
 \renewcommand{\clearpage}{}
