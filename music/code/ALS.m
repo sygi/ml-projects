@@ -57,7 +57,7 @@ for i=1:maxIter
        end
        diff = diff / length(randomValues);
        fprintf('My difference is %f\n', diff);
-       if (diff > 1e2)
+       if (diff > 1e-3)
            fprintf('Too small lambda, getting too high variance\n');
        end
    end

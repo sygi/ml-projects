@@ -4,7 +4,7 @@ function d = distance(v1, v2)
 assert(length(v1) == length(v2));
 d = 0;
 for i=1:length(v1)
-    d = d + (v1(i) - v2(i)).^2;
+    d = d + abs(v1(i) - v2(i));
 end
 d = d ./ length(v1);
 

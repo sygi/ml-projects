@@ -1,26 +1,14 @@
-function [TestErr,predicted] = estimateALS(Ytrain,Ytest,noHidden, normalize, lambda, maxIter)
+function [TestErr,predicted] = estimateALS(Ytrain,Ytest,noHidden, lambda, maxIter)
     if ~exist('maxIter', 'var')
-        maxIter = 50;
+        maxIter = 40;
     end
     
     if ~exist('lambda', 'var')
-        lambda = 10;
+        lambda = 0.0001;
     end
     
     %userMax = max(Ytrain, [], 2);
-    %Ytrain ./ repmat(userMax, 1, size(Ytrain,2));
-    
-    if (normalize)
-        Ytrain = transformData(Ytrain);
-        Ytest = transformTestData(Ytest);
-    end
-    
-    if (lambda < 1 && ~normalize)
-        lambda = lambda * 200;
-    end
-    
-    size(Ytrain)
-    size(Ytest)
+    %Ytrain ./ repmat(userMax, 1, size(Ytrain,2))
 
     orig = Ytrain;
     zeroArt = all(Ytrain == 0);
@@ -44,29 +32,19 @@ function [TestErr,predicted] = estimateALS(Ytrain,Ytest,noHidden, normalize, lam
     for i=1:length(zeroArt)
         usrs = find(Ytest(:, zeroArt(i)));
         for j=1:length(usrs)
-            predicted(usrs(j), zeroArt(i)) = sum(orig(usrs(j), :)) ./ max(1, sum(orig(usrs(j), :) ~= 0));
-            fprintf('something here\n');
+            predicted(usrs(j), zeroArt(i)) = 1e-10 + sum(orig(usrs(j), :)) ./ max(1, sum(orig(usrs(j), :) ~= 0));
         end
     end
     for i=1:length(zeroUsr)
         arts = find(Ytest(zeroUsr(i), :));
         for j=1:length(arts)
-            predicted(zeroUsr(i), arts(j)) = sum(orig(:, arts(j))) ./ max(1, sum(orig(:, arts(j)) ~= 0));
+            predicted(zeroUsr(i), arts(j)) = 1e-10 + sum(orig(:, arts(j))) ./ max(1, sum(orig(:, arts(j)) ~= 0));
         end
     end
     
-    [usr, art] = find(Ytest);
-    for i=1:length(usr)
-         predicted(usr(i), art(i)) = min(predicted(usr(i),art(i)), max(max(orig(usr(i), :)), max(orig(:, art(i)))));
-         proposition = max(predicted(usr(i), art(i)), min( ...
-             min(orig(usr(i), (orig(usr(i), :) ~= 0))), ...
-             min(orig(orig(:, art(i)) ~= 0, art(i)))));
-         if (min(size(proposition)) > 0)
-            predicted(usr(i), art(i)) = proposition;
-         end
-        % assert(predicted(usr(i), art(i)) >= 0);
-    end
+    predicted = boundPrediction(predicted, orig, Ytest);
     
     %Ytrain = Ytrain .* repmat(userMax, 1, size(Ytrain,2));
-    TestErr = logError(predicted, Ytest, normalize);
+    [TestErr, dist] = logError(predicted, Ytest, orig);
+    drawErrorDistribution(dist, orig, 0);
 end

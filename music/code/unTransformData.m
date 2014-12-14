@@ -4,6 +4,7 @@ function Y = unTransformData(X, where)
 % should be that unTransformData(transformData(X)) = X
 % where are indices that should transformation be applied to
 global gStd gMean;
+%where = where ~= 0;
 X(where) = X(where) .* gStd;
 X(where) = X(where) + gMean;
 X(where) = exp(X(where));

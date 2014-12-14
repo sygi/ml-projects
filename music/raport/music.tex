@@ -13,8 +13,8 @@
 \author{Michalina Pacholska \And Jakub Sygnowski}
 \addtolength{\voffset}{-1.25cm}
 \addtolength{\textheight}{+1.5cm}
-\addtolength{\hoffset}{-2.5cm}
-\addtolength{\textwidth}{+5cm}
+\addtolength{\hoffset}{-2cm}
+\addtolength{\textwidth}{+4cm}
 \nipsfinalcopy
 \newcommand{\mychapter}[2]{
     \setcounter{chapter}{#1}
@@ -84,7 +84,7 @@ We did a similar analysis for users, and it showed that almost all users ($1762$
 
 This information also justifies our later observation that there is more signal in the user row of the train matrix than in the artist column.
 
-\section{Mean prediction}
+\section{Mean prediction} \label{meanPred}
 First, very simple model we trained was to predict for each (user, artist) the average listen count of the artist. If there wasn't any listen counts for this artist in the train matrix, we predicted mean of the user, and if there were no such entries either, we predicted $0$ (which is our mean of all entries in train dataset after normalization).
 
 We run this method with $10$ different seeds on $5$-fold cross-validation and got $MSE=1.0082$. %2.0741 without normalization
@@ -129,8 +129,19 @@ To choose value of $K$ we ran cross-validation. As the training was taking some 
 \subfigure[Error distribution in predicting listen counts of different artists.]{\includegraphics[width=2.5in]{../figures/knn-err-dist-crop.pdf} \label{fig:knnErrorDist}}
 \caption{Analysis of KNN method.}
 \end{figure}
+
 \section{User-mean prediction}
 After trying all those methods we came back to the mean prediction and tried to run it on transposed matrix (it corresponds to predicting the mean of each user listen counts). It turned out that this method works better than any previous one, giving $MSE=0.3673$. It actually makes sense, considering figure \ref{fig:artistListeners} - there is very little data for most of the artists, and we have this data about the users. This also explains why KNN works best among other methods - it takes into account user data more than other methods. We used this very simple method to give predictions for our weak dataset.
+
+\section{Strong prediction}
+For the strong prediction problem, where we don't know any data for the user except for his friends in a social network, we tried $3$ algorithms:
+\begin{itemize}
+\item artist-mean prediction, which is already described in section \ref{meanPred}. It gave $MSE=1.0611$.
+\item to predict mean of the social network neighbours of the user. Its error was: $1.1213$. This method is implemented in file \texttt{estimateNeighbourMean.m}.
+\item estimation similar to KNN algorithm: First find $A$ and $U$ decomposition using ALS, and then calculate $U2$: mean of $U$ rows corresponding to the neighbours of given user. Then, we predict (user, artist) entry as $U2 * A(artist)$ - this basically estimates user's preference row in $U$ as its neighbours' rows mean and then returns same prediction as with ALS. This method achieved $MSE$ of $1.2767$. This method is implemented in the file \texttt{estimateALSweak.m}.
+\end{itemize}
+
+As again it turned out that the best method was the simplest one, we used it to make our test predicions.
 
 \begingroup
 \renewcommand{\cleardoublepage}{}
