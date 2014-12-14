@@ -6,5 +6,5 @@
 *.out
 octave-workspace
 images/data/*.mat
-images/data/randomforest-matlab
-
+images/code/randomforest-matlab/*
+images/code/libsvm*

@@ -18,7 +18,7 @@ SRC=src/
 #temporary .o output directory
 BUILD=tempbuild/
 
-CC=g++-4.7
+CC=g++
 FORTRAN=gfortran # or g77 whichever is present
 CFLAGS= -fpic -O2 -funroll-loops -msse3#-g -Wall
 FFLAGS=-O2 -fpic #-g
@@ -37,8 +37,8 @@ twonorm:  clean cokus classTree rfsub rfutils
 mex_classRF: $(SRC)classRF.cpp  $(SRC)mex_ClassificationRF_train.cpp $(SRC)mex_ClassificationRF_predict.cpp
 	echo 'Generating Mex'
 #	mex -c $(SRC)classRF.cpp -outdir $(BUILD)classRF.o -DMATLAB $(MEXFLAGS)
-	matlab-mex $(SRC)mex_ClassificationRF_train.cpp  $(SRC)classRF.cpp $(BUILD)classTree.o $(BUILD)rfutils.o rfsub.o $(BUILD)cokus.o -output mexClassRF_train -lgfortran -lm -DMATLAB $(MEXFLAGS)
-	matlab-mex $(SRC)mex_ClassificationRF_predict.cpp $(SRC)classRF.cpp $(BUILD)classTree.o $(BUILD)rfutils.o rfsub.o $(BUILD)cokus.o -output mexClassRF_predict -lgfortran -lm -DMATLAB $(MEXFLAGS)
+	~/system/matlab/bin/mex $(SRC)mex_ClassificationRF_train.cpp  $(SRC)classRF.cpp $(BUILD)classTree.o $(BUILD)rfutils.o rfsub.o $(BUILD)cokus.o -output mexClassRF_train -lgfortran -lm -DMATLAB $(MEXFLAGS)
+	~/system/matlab/bin/mex $(SRC)mex_ClassificationRF_predict.cpp $(SRC)classRF.cpp $(BUILD)classTree.o $(BUILD)rfutils.o rfsub.o $(BUILD)cokus.o -output mexClassRF_predict -lgfortran -lm -DMATLAB $(MEXFLAGS)
 
 cokus: $(SRC)cokus.cpp
 	echo 'Compiling Cokus (random number generator)'

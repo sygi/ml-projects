@@ -1,7 +1,9 @@
-function prediction = estimateSVM(X_train,y_train,X_test,kernel)
+function [predictionTest,predictionTrain] = estimateSVM(X_train,y_train,X_test,kernel)
 
 SVMStruct = fitcsvm(X_train,y_train,'KernelFunction',kernel);
-[sharp,doubledPrediction]  = predict(SVMStruct,X_test);
-prediction = doubledPrediction(:,2);
+[~,doubledPrediction]  = predict(SVMStruct,X_train);
+predictionTrain = doubledPrediction(:,2);
+[~,doubledPrediction]  = predict(SVMStruct,X_test);
+predictionTest = doubledPrediction(:,2);
 end
 
