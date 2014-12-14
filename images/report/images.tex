@@ -47,7 +47,7 @@
   \subfigure[original data]{\includegraphics[height=1.8in]{../figures/boxplot1-crop.pdf} \label{fig:boxplot1}}
   \;
   \subfigure[after normalization]{\includegraphics[height=1.8in]{../figures/boxplot2-crop.pdf} \label{fig:boxplot2}}
-  \caption{Boxplots of part of the data before \ref{fig:boxplot1} and after \ref{fig:boxplot2} normalization. Rest of the data looks similar.}
+  \caption{Box plots of part of the data before \ref{fig:boxplot1} and after \ref{fig:boxplot2} normalization. Rest of the data looks similar.}
 \end{figure}
   
   Since there are $9360$ numbers for one picture using all of them will lead to ill-conditioning (there is more features than pictures). We calculated correlation of them with output and we obtained picture of an abstract person, see \ref{fig:correlation}.
@@ -61,7 +61,7 @@
   \end{figure}
   To overcome the problem of huge number of features, we thought about removing those with little correlation to labels. This (empirically) did not work well, so we moved to other methods. One of them is singular value decomposition (i.e. taking only some vectors corresponding to the biggest singular values). This proved to be a better idea, because correlation captures only linear dependence and don't capture structure in the data. We have done SVD (i.e. we used MatLab's \verb+svds+ function) for $1000$ singular values and then used $8545\times1000$ as our new train matrix for testing different methods.
   
- We planned to do SVD again for bigger number of singular values later, if we would need it. But every method we tried was performing better for even smaller subsets of those $1000$ features (ex. $200$, corresponding to $200$ biggest singular values), in all cases due to high variance. To choose a good subset of features (after svd), we used F-score feature selection (explained e.g. in \cite{fscore}) from libsvm library tools \cite{fselection}.
+ We planned to do SVD again for bigger number of singular values later, if we would need it. But every method we tried was performing better for even smaller subsets of those $1000$ features (ex. $200$, corresponding to $200$ biggest singular values), in all cases due to high variance. To choose a good subset of features (after SVD), we used F-score feature selection (explained e.g. in \cite{fscore}) from libsvm library tools \cite{fselection}.
   This method estimates how much of particular variable variance  is correlated to output. We used it after SVD for two reasons: first - F-score, the same as correlation, don't take into account higher structure of the data and second - running F-score feature selection on all features required to much time and memory.
 
 % TODO: test matrices descriptions.
@@ -70,7 +70,7 @@
 We tried to apply many methods for this task, for most of them we used existing libraries. To check which method is better we were doing $5$-fold cross-validation and then plotted ROC for both test and train predictions. That was giving us an estimate how good performance is of particular method.
 
 \subsection{Penalized logistic regression}
-We started with the the simple (penalized) logistic regression. Not surprisingly, this method had quite big bias. What's interesting, when we were using $1000$ features (from SVD) it also had a big variance. Setting bigger penalty ($\lambda$) caused even bigger bias and very poor performance. Decreasing number of features helped decreasing variance. Penalized logistic regression was working the best with only about $120$ features with biggest singular values in svd and $\lambda = 0.1$, and gave average TPR $0.831$ (see \ref{fig:ROClinear})
+We started with the the simple (penalized) logistic regression. Not surprisingly, this method had quite big bias. What's interesting, when we were using $1000$ features (from SVD) it also had a big variance. Setting bigger penalty ($\lambda$) caused even bigger bias and very poor performance. Decreasing number of features helped decreasing variance. Penalized logistic regression was working the best with only about $120$ features with biggest singular values in SVD and $\lambda = 0.1$, and gave average TPR $0.831$ (see \ref{fig:ROClinear})
 
 % We tried to use the most correlated part of all of the data (without decomposition), but to then penalized logistic regression needed more data (and more time) and was performing much poorer. At that point we abandoned using not decomposed data, because we expected that using the most correlated data should be the best suited for simple model like penalized logistic regression.
 
@@ -85,7 +85,7 @@ Then we used data selected by F-score and it improved slightly. We used the same
 
 \subsection{Support Vector Machine}
 For SVM we used LIBSVM library \cite{libsvm}.
-We tried different kernels for SVM, but didn't try to contruct  one. We used libsvm builtin tool (\texttt{grid.py}) to grid search for parameters of kernel, and then tried to tune them by hand, but it didn't give much improvement. More significant was changing amount of features in the models. We think optimal value was about $120$. For all svm models we obtained similar TPR, about $0.85$, but they didn't do well with small values of False Positive Rate.
+We tried different kernels for SVM, but didn't try to construct  one. We used libsvm built-in tool (\texttt{grid.py}) to grid search for parameters of kernel, and then tried to tune them by hand, but it didn't give much improvement. More significant was changing amount of features in the models. We think optimal value was about $120$. For all SVM models we obtained similar TPR, about $0.85$, but they didn't do well with small values of False Positive Rate.
 
   \begin{figure}[h]
     \center
