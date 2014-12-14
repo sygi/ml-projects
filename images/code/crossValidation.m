@@ -46,8 +46,8 @@ fprintf('stating %d-fold cross-validation\n',k);
         X_train = X_train(:,c>treshold);
         X_test = X_test(:,c>treshold);
       %estimating the probabilities
-        [predictionTest(idx(1:Nk)),predictionTrain(idx(Nk+1:end),i)]=estimateSVM(X_train,y_train,X_test,parameter);
-         %[predictionTest(idx(1:Nk)),predictionTrain(idx(Nk+1:end),i)]=estimateLogisticReg(X_train,y_train,X_test,parameter);
+        %[predictionTest(idx(1:Nk)),predictionTrain(idx(Nk+1:end),i)]=estimateSVM(X_train,y_train,X_test,parameter);
+        %[predictionTest(idx(1:Nk)),predictionTrain(idx(Nk+1:end),i)]=estimateLogisticReg(X_train,y_train,X_test,parameter);
       %test prediction
         %prediction(idx(1:Nk))=y_test;
         %[predictionTest(idx(1:Nk)),predictionTrain(idx(Nk+1:end),i)]=estimateForest(X_train,y_train,X_test,parameter);

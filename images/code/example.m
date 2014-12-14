@@ -67,7 +67,7 @@ for k=1:K
 
   seeds = randperm(10000);
     for seed=1:1
-    rng(seeds(seed));  % fix seed, this    NN is very sensitive to initialization
+    rng(13);  % fix seed, this    NN is very sensitive to initialization
 
     % setup NN. The first layer needs to have number of features neurons,
     %  and the last layer the number of classes (here two).
@@ -123,7 +123,7 @@ for k=1:K
 
     % now you can see that the performance of each method
     % is in avgTPRList. You can see that random is doing very bad.
-    errTe(k) = fastROC(Te.y > 0, nnPred, false, '' )
+    errTe(k) = fastROC(Te.y > 0, nnPred, true, '' )
   end
   mean(err)
 end
